@@ -35,7 +35,7 @@ class Decide:
         on input radar tracking information.
     """
 
-    def __init__(self, numpoints, points, parameters, lcm, puv) -> None:
+    def __init__(self, numpoints: int, points: np.ndarray, parameters: dict, lcm: np.ndarray, puv: np.ndarray) -> None:
         """
         Assigns given inputs to corresponding attributes 
         and initializes the outputs to their correct data type.
@@ -67,7 +67,7 @@ class Decide:
         self.fuv = np.zeros(15, dtype="bool_")
         self.launch = False
 
-    def decide(self):
+    def decide(self) -> None:
         """
         Prints a boolean signal to the 
         standard output using all class attributes.
