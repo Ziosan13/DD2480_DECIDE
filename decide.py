@@ -62,9 +62,9 @@ class Decide:
         self.puv = puv
 
         # Outputs initialization
-        self.cmv = np.zeros(15, dtype="_bool")
+        self.cmv = np.zeros(15, dtype="bool_")
         self.pum = np.zeros((15, 15))
-        self.fuv = np.zeros(15, dtype="_bool")
+        self.fuv = np.zeros(15, dtype="bool_")
         self.launch = False
 
     def decide(self):
