@@ -8,7 +8,7 @@ class Cmv:
     The result of each method is stored in a list: cmv.
     """
 
-    def __init__(self, parameters) -> None:
+    def __init__(self, parameters, points, num_points) -> None:
         self.length1 = parameters["LENGTH1"]
         self.radius1 = parameters["RADIUS1"]
         self.epsilon = parameters["EPSILON"]
@@ -28,6 +28,9 @@ class Cmv:
         self.length2 = parameters["LENGTH2"]
         self.radius2 = parameters["RADIUS2"]
         self.area2 = parameters["AREA2"]
+
+        self.points = points
+        self.num_points = num_points
 
         self.cmv = np.zeros(15, dtype="bool_")
         self.cmv_calc(self)
