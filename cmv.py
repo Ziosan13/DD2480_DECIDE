@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Cmv:
     """
     CMV - Conditions Met Vector
@@ -33,7 +34,7 @@ class Cmv:
         self.num_points = num_points
 
         self.cmv = np.zeros(15, dtype="bool_")
-        self.cmv_calc(self)
+        self.cmv_calc()
 
     def cmv_calc(self):
         self.cmv[0] = self.lic0()
@@ -52,63 +53,48 @@ class Cmv:
         self.cmv[13] = self.lic13()
         self.cmv[14] = self.lic14()
         return self.cmv
-    
 
     def lic0(self):
         pass
 
-
     def lic1(self):
         pass
-
 
     def lic2(self):
         pass
 
-
-    def lic3(self):        
+    def lic3(self):
         pass
-
 
     def lic4(self):
         pass
 
-
     def lic5(self):
         pass
-
 
     def lic6(self):
         pass
 
-
     def lic7(self):
         pass
-
 
     def lic8(self):
         pass
 
-
     def lic9(self):
         pass
-
 
     def lic10(self):
         pass
 
-
     def lic11(self):
         pass
 
-    
     def lic12(self):
         pass
 
-
     def lic13(self):
         pass
-
 
     def lic14(self):
         pass
