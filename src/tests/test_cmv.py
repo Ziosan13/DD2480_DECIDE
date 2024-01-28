@@ -115,5 +115,23 @@ class test_cmv(unittest.TestCase):
         params['AREA1'] = 6.1
         self.assertFalse(Cmv(params, -points, num_points).lic3())
 
+        # Test Case 11:
+        # Input:
+        # - AREA1 is negative
+        # - points form a 3-4-5 triangle of area equal to 6.0
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['AREA1'] = -1.0
+            Cmv(params, points, num_points).lic3()
+
+        # Test Case 12:
+        # Input:
+        # - AREA1 is not a number
+        # - points form a 3-4-5 triangle of area equal to 6.0
+        # Expected behavior: raises TypeError.
+        with self.assertRaises(TypeError):
+            params['AREA1'] = "hi"
+            Cmv(params, points, num_points).lic3()
+
 if __name__ == '__main__':
     unittest.main()
