@@ -61,7 +61,29 @@ class Cmv:
         pass
 
     def lic2(self):
-        pass
+        for i in range(self.num_points-2):
+            x_i = points[i][0]
+            x_i_plus_one = points[i+1][0]
+            x_i_plus_two = points[i+2][0]
+            y_i = points[i][1]
+            y_i_plus_one = points[i+1][1]
+            y_i_plus_two = points[i+2][1]
+
+            BA = [x_i-x_i_plus_one,y_i-y_i_plus_one]
+            BC = [x_i_plus_two-x_i_plus_one,y_i_plus_two-y_i_plus_one]
+
+            angle = np.arccos(np.dot(BA,BC)/(np.linalg(BA)*(np.linalg(BC))))
+
+            if angle < np.pi - self.epsilon:
+                return True
+            
+            elif angle > np.pi + self.epsilon:
+                return True
+        
+        return False
+
+            
+ 
 
     def lic3(self):
         pass
