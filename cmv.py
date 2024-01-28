@@ -64,7 +64,22 @@ class Cmv:
         pass
 
     def lic3(self):
-        pass
+        """
+        This LIC is True if there exists at least one 
+        set of three consecutive data points that are 
+        the vertices of a triangle with area greater than AREA1. 
+
+        Conditions on parameters: 
+        - (0 <= AREA1)
+        """
+
+        for i in range(self.num_points - 2):
+            delta = np.linalg.det(np.c_[self.points[i:(i+3)], np.ones((3, 1))])
+            A = 0.5*np.abs(delta)
+            if (A > self.area1):
+                return True
+
+        return False
 
     def lic4(self):
         pass
