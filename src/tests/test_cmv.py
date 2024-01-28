@@ -30,6 +30,18 @@ class test_cmv(unittest.TestCase):
             [4, 1],
         ])
 
+        colinear_points = np.array([
+            [2.5, 3],
+            [1, 5],
+            [4, 1],
+        ])
+
+        same_points = np.array([
+            [1, 1],
+            [1, 1],
+            [1, 1],
+        ])
+
         num_points = points.shape[0]
 
         # Test Case 1:
@@ -117,6 +129,22 @@ class test_cmv(unittest.TestCase):
 
         # Test Case 11:
         # Input:
+        # - AREA1 is a float with value strictly greater than 0.0
+        # - points are colinear
+        # Expected behavior: LIC 3 is False.
+        params['AREA1'] = 1.0
+        self.assertFalse(Cmv(params, colinear_points, num_points).lic3())
+
+        # Test Case 12:
+        # Input:
+        # - AREA1 is a float with value strictly greater than 0.0
+        # - points are the same
+        # Expected behavior: LIC 3 is False.
+        params['AREA1'] = 1.0
+        self.assertFalse(Cmv(params, same_points, num_points).lic3())
+
+        # Test Case 13:
+        # Input:
         # - AREA1 is negative
         # - points form a 3-4-5 triangle of area equal to 6.0
         # Expected behavior: raises ValueError.
@@ -124,7 +152,7 @@ class test_cmv(unittest.TestCase):
             params['AREA1'] = -1.0
             Cmv(params, points, num_points).lic3()
 
-        # Test Case 12:
+        # Test Case 14:
         # Input:
         # - AREA1 is not a number
         # - points form a 3-4-5 triangle of area equal to 6.0
