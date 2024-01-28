@@ -72,6 +72,12 @@ class Cmv:
         Conditions on parameters: 
         - (0 <= AREA1)
         """
+        if (type(self.area1) is not float) and (type(self.area1) is not int):
+            raise TypeError(
+                'AREA1 parameter in parameters input must be a number.')
+        if (self.area1 < 0):
+            raise ValueError(
+                'AREA1 parameter in parameters input must be positive.')
 
         for i in range(self.num_points - 2):
             delta = np.linalg.det(np.c_[self.points[i:(i+3)], np.ones((3, 1))])
