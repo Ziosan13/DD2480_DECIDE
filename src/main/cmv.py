@@ -158,6 +158,8 @@ class Cmv:
             circumcenter = np.array([x_circumcenter, y_circumcenter])
             if reduce(lambda acc, p: acc and (np.linalg.norm(p - circumcenter) > self.radius1), points_of_interest, np.linalg.norm(points_of_interest[0] - circumcenter) > self.radius1):
                 return True
+            
+        return False
 
     def lic9(self):
         pass
