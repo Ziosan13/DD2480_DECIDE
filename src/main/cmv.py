@@ -66,6 +66,16 @@ class Cmv:
         if (self.area1 < 0):
             raise ValueError(
                 'AREA1 parameter in parameters input must be positive.')
+        if (type(self.radius1) is not float) and (type(self.radius1) is not int):
+            raise TypeError(
+                'RADIUS1 parameter in parameters input must be a number.')
+        if (self.radius1 < 0):
+            raise ValueError(
+                'RADIUS1 parameter in parameters input must be positive.')
+        if (type(self.a_pts) is not int) or (type(self.b_pts) is not int):
+            raise TypeError('A_PTS and B_PTS parameters must be integers.')
+        if (self.a_pts < 1 or self.b_pts < 1):
+            raise ValueError('A_PTS and B_PTS must be greater than 1.')
         # we can add more checks as we make the LICs
 
     def lic0(self):

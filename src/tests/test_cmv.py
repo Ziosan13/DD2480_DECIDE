@@ -245,5 +245,109 @@ class test_cmv(unittest.TestCase):
         params['RADIUS1'] = 0.0
         self.assertFalse(Cmv(params, np.array([[1, 1]]), 1).lic8())
 
+        # Test Case 5:
+        # Input:
+        # - A_PTS is negative
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = -1
+            params['B_PTS'] = 1
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 6:
+        # Input:
+        # - B_PTS is negative
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = -1
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 7:
+        # Input:
+        # - RADIUS1 is negative
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = 1
+            params['RADIUS1'] = -1.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 8:
+        # Input:
+        # - A_PTS is a float
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises TypeError.
+        with self.assertRaises(TypeError):
+            params['A_PTS'] = 1.0
+            params['B_PTS'] = 1
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 9:
+        # Input:
+        # - B_PTS is a float
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises TypeError.
+        with self.assertRaises(TypeError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = 1.0
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 10:
+        # Input:
+        # - RADIUS1 is not a number
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises TypeError.
+        with self.assertRaises(TypeError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = 1
+            params['RADIUS1'] = "hi"
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 11:
+        # Input:
+        # - A_PTS is strictly less than 1
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = 0
+            params['B_PTS'] = 1
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 12:
+        # Input:
+        # - B_PTS is strictly less than 1
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = 0
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
 if __name__ == '__main__':
     unittest.main()
