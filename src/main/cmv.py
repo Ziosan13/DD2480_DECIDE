@@ -1,5 +1,6 @@
 import numpy as np
 from functools import reduce
+from math import isclose
 
 class Cmv:
     """
@@ -137,6 +138,15 @@ class Cmv:
         for i in range(self.num_points - (self.a_pts + self.b_pts) - 2):
             points_of_interest = np.array(
                 [self.points[i], self.points[i + (self.a_pts + 1)], self.points[i + (self.a_pts + self.b_pts + 2)]])
+            
+            # Colinear points
+            if isclose(np.linalg.det(np.vstack([points_of_interest.T, np.ones((1, 3))])), 0, abs_tol=1e-9):
+                norms = np.array([[np.linalg.norm(points_of_interest[i] - points_of_interest[j])
+                                    for i in range(points_of_interest.shape[0])] for j in range(points_of_interest.shape[0])])
+                if np.max(norms) > self.radius1:
+                    return True
+                else:
+                    continue
             
             delta = np.linalg.det(np.c_[points_of_interest, np.ones((3, 1))])
             x_matrix = np.c_[np.array(
