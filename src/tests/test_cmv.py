@@ -177,5 +177,61 @@ class test_cmv(unittest.TestCase):
             params['AREA1'] = "hi"
             Cmv(params, points, num_points).lic3()
 
+    def test_lic_4(self) -> None:
+        params = self.parameters.copy()
+
+        # Test Case 1:
+        # Input:
+        # - Q_PTS is an int with value 4
+        # - points are 4 verticies with 1 vertex in each quadrant
+        # - QUADS is an int with value 3
+        # Expected behavior: LIC 4 is True.
+        params['Q_PTS'] = 4
+        params['QUADS'] = 3
+        points = np.array([
+            [1, 1],
+            [-1, 1],
+            [-1, -1],
+            [1, -1],
+        ])
+        num_points = points.shape[0]
+        self.assertTrue(Cmv(params, points, num_points).lic4())
+
+        # Test Case 2:
+        # Input:
+        # - Q_PTS is an int with value 4
+        # - points are 4 verticies with 1 vertex in each quadrant,
+        # but one vertex is the origin
+        # - QUADS is an int with value 3
+        # Expected behavior: LIC 4 is True.
+        params['Q_PTS'] = 4
+        params['QUADS'] = 3
+        points = np.array([
+            [0, 0],
+            [-1, 1],
+            [-1, -1],
+            [1, -1],
+        ])
+        num_points = points.shape[0]
+        self.assertTrue(Cmv(params, points, num_points).lic4())
+
+        # Test Case 3:
+        # Input:
+        # - Q_PTS is an int with value 4
+        # - points are 4 verticies all in quadrant 1
+        # - QUADS is an int with value 3
+        # Expected behavior: LIC 4 is False.
+        params['Q_PTS'] = 4
+        params['QUADS'] = 3
+        points = np.array([
+            [1, 1],
+            [2, 1],
+            [1, 2],
+            [2, 2],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic4())
+
+
 if __name__ == '__main__':
     unittest.main()

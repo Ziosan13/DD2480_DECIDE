@@ -95,7 +95,35 @@ class Cmv:
         return False
 
     def lic4(self):
-        pass
+        """
+        This LIC is True if there exists at least one set of
+        Q_PTS consecutive data points that lie in more than
+        QUADS quadrants. QUADS: [1,3], Q_PTS: [2, NUMPOINTS]
+        """
+        for i in range(self.num_points):
+            if i + self.q_pts > self.num_points:
+                break
+            points = self.points[i:i+self.q_pts]
+            quadrants = [False for _ in range(4)]
+            for point in points:
+                if point[0] >= 0 and point[1] >= 0:
+                    quadrants[0] = True
+                elif point[0] <= 0 and point[1] >= 0:
+                    quadrants[1] = True
+                elif point[0] <= 0 and point[1] <= 0:
+                    quadrants[2] = True
+                elif point[0] >= 0 and point[1] <= 0:
+                    quadrants[3] = True
+            quads = 0
+            for q in quadrants:
+                if q:
+                    quads += 1
+            if quads > self.quads:
+                return True
+        return False
+            
+
+
 
     def lic5(self):
         pass
