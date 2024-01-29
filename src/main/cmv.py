@@ -72,7 +72,7 @@ class Cmv:
             BA = [x_i-x_i_plus_one,y_i-y_i_plus_one]
             BC = [x_i_plus_two-x_i_plus_one,y_i_plus_two-y_i_plus_one]
 
-            angle = np.arccos(np.dot(BA,BC)/(np.linalg(BA)*(np.linalg(BC))))
+            angle = np.arccos(np.dot(BA,BC)/(np.linalg.norm(BA)*(np.linalg.norm(BC))))
 
             if angle < np.pi - self.epsilon:
                 return True
