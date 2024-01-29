@@ -34,6 +34,7 @@ class Cmv:
         self.num_points = num_points
 
         self.cmv = np.zeros(15, dtype="bool_")
+        self.check_parameters()
         self.cmv_calc()
 
     def cmv_calc(self):
@@ -53,6 +54,19 @@ class Cmv:
         self.cmv[13] = self.lic13()
         self.cmv[14] = self.lic14()
         return self.cmv
+    
+    def check_parameters(self):
+        """
+        Checks that parameters are well-formed.
+        Raises exceptions otherwise.
+        """
+        if (type(self.area1) is not float) and (type(self.area1) is not int):
+            raise TypeError(
+                'AREA1 parameter in parameters input must be a number.')
+        if (self.area1 < 0):
+            raise ValueError(
+                'AREA1 parameter in parameters input must be positive.')
+        # we can add more checks as we make the LICs
 
     def lic0(self):
         pass
@@ -72,13 +86,6 @@ class Cmv:
         Conditions on parameters: 
         - (0 <= AREA1)
         """
-        if (type(self.area1) is not float) and (type(self.area1) is not int):
-            raise TypeError(
-                'AREA1 parameter in parameters input must be a number.')
-        if (self.area1 < 0):
-            raise ValueError(
-                'AREA1 parameter in parameters input must be positive.')
-
         for i in range(self.num_points - 2):
             delta = np.linalg.det(np.c_[self.points[i:(i+3)], np.ones((3, 1))])
             A = 0.5*np.abs(delta)
