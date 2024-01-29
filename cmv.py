@@ -58,7 +58,26 @@ class Cmv:
         pass
 
     def lic1(self):
-        pass
+        for i in range(len(self.points)-2):
+            x_i = self.points[i][0]
+            x_i_plus_one = self.points[i+1][0]
+            x_i_plus_two = self.points[i+2][0]
+            y_i = self.points[i][1]
+            y_i_plus_one = self.points[i+1][1]
+            y_i_plus_two = self.points[i+2][1]
+            
+            AB = [x_i_plus_one-x_i,y_i_plus_one-y_i]
+            BC = [x_i_plus_two-x_i_plus_one,y_i_plus_two-y_i_plus_one]
+            CA = [x_i-x_i_plus_two,y_i-y_i_plus_two]
+            
+            area = 1/2 * np.linalg.norm(np.cross(AB,BC)+np.cross(BC,CA)+np.cross(CA,AB))
+
+            r = (np.linalg.norm(AB)*np.linalg.norm(BC)*np.linalg.norm(CA))/(4*area)
+
+            if r > self.radius1:
+                return True
+        
+        return False
 
     def lic2(self):
         pass
