@@ -67,7 +67,20 @@ class Decide:
         self.fuv = np.zeros(15, dtype="bool_")
         self.launch = False
 
-    def load_lcm_from_file(self, file_path : str):
+    def load_lcm_from_file(self, file_path : str) -> None:
+        """
+        Generates an LCM matrix from a txt file 
+        and assigns it to the current instance.
+        The txt file must contain 15x15 values
+        among 0 (for NOTUSED), 1 (for ORR) 
+        and 2 (for ANDD). The matrix must 
+        be symmetric (LCM == LCM.T).
+
+        Parameters
+        ----------
+        file_path: str
+            path to the txt file
+        """
         lcm = []
         with open(file_path, 'r') as file:
             lines = file.readlines()

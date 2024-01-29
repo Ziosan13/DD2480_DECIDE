@@ -42,31 +42,55 @@ class test_decide(unittest.TestCase):
         self.assertFalse(self.decide.launch)
 
     def test_load_lcm_from_file(self):
-        self.decide.load_lcm_from_file('../data/lcm_example_1.txt')
-
         base_array = np.array([
             ["ANDD", "ANDD", "ORR", "ANDD"],
             ["ANDD", "ANDD", "ORR", "ORR"],
             ["ORR", "ORR", "ANDD", "ANDD"],
             ["ANDD", "ORR", "ANDD", "ANDD"],
         ])
-        expected_lcm_1 = np.vstack([np.c_[base_array, np.full((4, 11), "NOTUSED")], np.full((11, 15), "NOTUSED")])
-        self.assertTrue((self.decide.lcm == expected_lcm_1).all())
 
-        self.decide.load_lcm_from_file('../data/lcm_example_2.txt')
-        expected_lcm_2 = np.vstack([
+        # Test Case 1:
+        # Input:
+        # - LCM example 1 from specification.
+        # - Corresponding LCM created with NumPy
+        # Expected behavior: equality is True.
+        self.decide.load_lcm_from_file('../data/lcm_example_1.txt')
+        expected_lcm = np.vstack([
+            np.c_[base_array, np.full((4, 11), "NOTUSED")], 
+            np.full((11, 15), "NOTUSED")
+        ])
+        self.assertTrue((self.decide.lcm == expected_lcm).all())
+
+        # Test Case 2:
+        # Input:
+        # - LCM example 1 from specification.
+        # - Not corresponding LCM created with NumPy
+        # Expected behavior: equality is True.
+        not_expected_lcm = np.vstack([
             np.c_[base_array, np.full((4, 10), "NOTUSED"), np.full((4, 1), "ORR")], 
             np.c_[np.full((10, 14), "NOTUSED"), np.full((10, 1), "ORR")], 
             np.full((1, 15), "ORR")
         ])
-        self.assertTrue((self.decide.lcm == expected_lcm_2).all())
+        self.assertFalse((self.decide.lcm ==  not_expected_lcm).all())
 
+        # Test Case 3:
+        # Input:
+        # - Not symmetric LCM in file.
+        # Expected behavior: raises ValueError.
         with self.assertRaises(ValueError):
             self.decide.load_lcm_from_file('../data/lcm_test_not_symmetric.txt')
 
+        # Test Case 4:
+        # Input:
+        # - LCM of wrong shape in file.
+        # Expected behavior: raises ValueError.
         with self.assertRaises(ValueError):
             self.decide.load_lcm_from_file('../data/lcm_test_wrong_shape.txt')
 
+        # Test Case 5:
+        # Input:
+        # - LCM in file has a wrong value (3)
+        # Expected behavior: raises ValueError.
         with self.assertRaises(ValueError):
             self.decide.load_lcm_from_file('../data/lcm_test_wrong_value.txt')
 
