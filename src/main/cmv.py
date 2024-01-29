@@ -143,7 +143,7 @@ class Cmv:
             if isclose(np.linalg.det(np.vstack([points_of_interest.T, np.ones((1, 3))])), 0, abs_tol=1e-9):
                 norms = np.array([[np.linalg.norm(points_of_interest[i] - points_of_interest[j])
                                     for i in range(points_of_interest.shape[0])] for j in range(points_of_interest.shape[0])])
-                if np.max(norms) > self.radius1:
+                if np.max(norms) > 2*self.radius1:
                     return True
                 else:
                     continue

@@ -177,7 +177,7 @@ class test_cmv(unittest.TestCase):
             params['AREA1'] = "hi"
             Cmv(params, points, num_points).lic3()
 
-    def test_lic_8(self):
+    def test_lic_8(self) -> None:
         params = self.parameters.copy()
 
         points = np.array([
@@ -297,38 +297,38 @@ class test_cmv(unittest.TestCase):
 
         # Test Case 7:
         # Input:
-        # - RADIUS1 is strictly less than 5.0
+        # - RADIUS1 is strictly less than 2.5
         # - points at indices 2, 6, 11
         #   are colinear and the maximum
         #   distance between them is 5.0
         # Expected behavior: LIC 8 is True.
         params['A_PTS'] = 3
         params['B_PTS'] = 4
-        params['RADIUS1'] = 4.9
+        params['RADIUS1'] = 2.4
         self.assertTrue(Cmv(params, colinear_points, num_points).lic8())
 
         # Test Case 8:
         # Input:
-        # - RADIUS1 is equal to 5.0
+        # - RADIUS1 is equal to 2.5
         # - points at indices 2, 6, 11
         #   are colinear and the maximum
         #   distance between them is 5.0
         # Expected behavior: LIC 8 is False.
         params['A_PTS'] = 3
         params['B_PTS'] = 4
-        params['RADIUS1'] = 5.0
+        params['RADIUS1'] = 2.5
         self.assertFalse(Cmv(params, colinear_points, num_points).lic8())
 
         # Test Case 9:
         # Input:
-        # - RADIUS1 is strictly greater than 5.0
+        # - RADIUS1 is strictly greater than 2.5
         # - points at indices 2, 6, 11
         #   are colinear and the maximum
         #   distance between them is 5.0
         # Expected behavior: LIC 8 is False.
         params['A_PTS'] = 3
         params['B_PTS'] = 4
-        params['RADIUS1'] = 5.0
+        params['RADIUS1'] = 2.6
         self.assertFalse(Cmv(params, colinear_points, num_points).lic8())
 
         # Test Case 10:
