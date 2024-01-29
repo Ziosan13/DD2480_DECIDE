@@ -1,5 +1,5 @@
 import numpy as np
-
+from functools import reduce
 
 class Cmv:
     """
@@ -107,7 +107,37 @@ class Cmv:
         pass
 
     def lic8(self):
-        pass
+        """
+        This LIC is True if there exists at least one 
+        set of three data points separated by exactly A PTS and B PTS 
+        consecutive intervening points, respectively, 
+        that cannot be contained within or on a circle of radius RADIUS1. 
+        The condition is not met when NUMPOINTS < 5.
+
+        Conditions on parameters: 
+        - (0 <= RADIUS1)
+        - (1 <= A_PTS)
+        - (1 <= B_PTS)
+        - (A_PTS + B_PTS <= (NUMPOINTS - 3))
+        """
+
+        if self.num_points < 5:
+            return False
+        
+        for i in range(self.num_points - (self.a_pts + self.b_pts) - 2):
+            points_of_interest = np.array(
+                [self.points[i], self.points[i + (self.a_pts + 1)], self.points[i + (self.a_pts + self.b_pts + 2)]])
+            
+            delta = np.linalg.det(np.c_[points_of_interest, np.ones((3, 1))])
+            x_matrix = np.c_[np.array(
+                [p[0]*p[0] + p[1]*p[1] for p in points_of_interest]), points_of_interest[:, 1], np.ones((3, 1))]
+            y_matrix = np.c_[np.array(
+                [p[0]*p[0] + p[1]*p[1] for p in points_of_interest]), points_of_interest[:, 0], np.ones((3, 1))]
+            x_circumcenter = (1/(2*delta))*np.linalg.det(x_matrix)
+            y_circumcenter = -(1/(2*delta))*np.linalg.det(y_matrix)
+            circumcenter = np.array([x_circumcenter, y_circumcenter])
+            if reduce(lambda acc, p: acc and (np.linalg.norm(p - circumcenter) > self.radius1), points_of_interest, np.linalg.norm(points_of_interest[0] - circumcenter) > self.radius1):
+                return True
 
     def lic9(self):
         pass

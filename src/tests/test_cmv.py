@@ -177,5 +177,73 @@ class test_cmv(unittest.TestCase):
             params['AREA1'] = "hi"
             Cmv(params, points, num_points).lic3()
 
+    def test_lic_8(self):
+        params = self.parameters.copy()
+
+        points = np.array([
+            [6, 5],
+            [3, 6],
+            [1, 1],
+            [12, 10],
+            [7, 5],
+            [5, 6],
+            [1, 5],
+            [4, 8],
+            [1, 3],
+            [7, 4],
+            [5, 5],
+            [4, 1]]
+        )
+
+        num_points = points.shape[0]
+
+        # Test Case 1:
+        # Input:
+        # - RADIUS1 is strictly greater than 2.5
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.6
+        self.assertFalse(Cmv(params, points, num_points).lic8())
+
+        # Test Case 2:
+        # Input:
+        # - RADIUS1 is equal to 2.5
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.5
+        self.assertFalse(Cmv(params, points, num_points).lic8())
+
+        # Test Case 3:
+        # Input:
+        # - RADIUS1 is strictly less than 2.5
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: LIC 8 is True.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.4
+        self.assertTrue(Cmv(params, points, num_points).lic8())
+
+        # Test Case 4:
+        # Input:
+        # - NUMPOINTS is strictly less than 5
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, np.array([[1, 1]]), 1).lic8())
+
 if __name__ == '__main__':
     unittest.main()
