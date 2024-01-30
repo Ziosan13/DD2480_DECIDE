@@ -111,41 +111,49 @@ class Cmv:
             AB = [x_i_plus_one-x_i,y_i_plus_one-y_i]
             BC = [x_i_plus_two-x_i_plus_one,y_i_plus_two-y_i_plus_one]
             CA = [x_i-x_i_plus_two,y_i-y_i_plus_two]
+
+            if not (AB == [0,0] or BC == [0,0] or CA == [0,0]): ## Checks if any of the two points are the same
+                
+                # Two cases: 
+                # Case 1: Longest side is diameter
+
+                # Checks which side is the longest, and which points span the longest side
+                if np.linalg.norm(AB) > np.linalg.norm(BC) and np.linalg.norm(AB) > np.linalg.norm(CA):
+                    longest_side = AB
+                    other_point = [x_i_plus_two,y_i_plus_two]
+                    midpoint = [x_i,y_i]+[1/2*AB[0],1/2*AB[1]]
+
+                elif np.linalg.norm(BC) > np.linalg.norm(AB) and np.linalg.norm(BC) > np.linalg.norm(CA):
+                    longest_side = BC
+                    other_point = [x_i,y_i]
+                    midpoint = [x_i_plus_one,y_i_plus_one]+[1/2*BC[0],1/2*BC[1]]
+
+
+                elif np.linalg.norm(CA) > np.linalg.norm(BC) and np.linalg.norm(CA) > np.linalg.norm(AB):
+                    longest_side = CA
+                    other_point = [x_i_plus_one,y_i_plus_one]
+                    midpoint = [x_i_plus_two,y_i_plus_two]+[[1/2*CA[0],1/2*CA[1]]]
+
+                # Checks if the point not on the diameter is in or on the circle
+                if ((other_point[0]-midpoint[0])**2  + (other_point[1]-midpoint[1])**2 <= np.linalg.norm(longest_side)**2):
+                    r = np.linalg.norm(longest_side)/2 # computes radius as half of the longest side in triangel
+
+                # Case 2: All points are on circle, radius is given by the triangel spanning the circle
+                else:
+                    area = 1/2 * np.linalg.norm(np.cross(AB,BC)+np.cross(BC,CA)+np.cross(CA,AB))
+                    r = (np.linalg.norm(AB)*np.linalg.norm(BC)*np.linalg.norm(CA))/(4*area)
+              
+                if r > self.radius1:
+                    return True
             
-            # Two cases: 
+            elif not (AB == [0,0] and BC == [0,0] and CA == [0,0]): #two points are the same
 
-            # Case 1: Longest side is diameter
-
-            # Checks which side is the longest, and which points span the longest side
-            if np.linalg.norm(AB) > np.linalg.norm(BC) and np.linalg.norm(AB) > np.linalg.norm(CA):
-                longest_side = AB
-                other_point = [x_i_plus_two,y_i_plus_two]
-                midpoint = [x_i,y_i]+[1/2*AB[0],1/2*AB[1]]
-
-            elif np.linalg.norm(BC) > np.linalg.norm(AB) and np.linalg.norm(BC) > np.linalg.norm(CA):
-                longest_side = BC
-                other_point = [x_i,y_i]
-                midpoint = [x_i_plus_one,y_i_plus_one]+[1/2*BC[0],1/2*BC[1]]
-
-
-            elif np.linalg.norm(CA) > np.linalg.norm(BC) and np.linalg.norm(CA) > np.linalg.norm(AB):
-                longest_side = CA
-                other_point = [x_i_plus_one,y_i_plus_one]
-                midpoint = [x_i_plus_two,y_i_plus_two]+[[1/2*CA[0],1/2*CA[1]]]
-
-            # Checks if the point not on the diameter is in the circle
-            if ((other_point[0]-midpoint[0])**2  + (other_point[1]-midpoint[1])**2 < np.linalg.norm(longest_side)**2):
-                r = np.linalg.norm(longest_side)/2 # computes radius as half of the longest side in triangel
-
-            # Case 2: All points are on circle, radius is given by the triangel spanning the circle
-            else:
-                area = 1/2 * np.linalg.norm(np.cross(AB,BC)+np.cross(BC,CA)+np.cross(CA,AB))
-                r = (np.linalg.norm(AB)*np.linalg.norm(BC)*np.linalg.norm(CA))/(4*area)
-
-            if r > self.radius1:
-                return True
-
-        return False
+                r = max(np.linalg.norm(AB),np.linalg.norm(BC),np.linalg.norm(CA))/2
+               
+                if r > self.radius1:
+                    return True
+            
+            return False
 
     def lic2(self):
         for i in range(self.num_points-2):

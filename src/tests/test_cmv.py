@@ -174,24 +174,24 @@ class test_cmv(unittest.TestCase):
         # Test Case 1:
         # Input: 
         # RADIUS1 is 0.1
-        # The points form a circle with radius r = sqrt(0.5)
-        # Expect: LIC0 is true 
+        # The points form a circle with radius r = sqrt(1)
+        # Expect: LIC1 is true 
         params["RADIUS1"] = 0.1
         self.assertTrue(Cmv(params, points, num_points).lic1())
 
         # Test Case 2:
         # Input: 
         # RADIUS1 is 1
-        # The points form a circle with radius r = sqrt(0.5)
-        # Expect: LIC0 is true 
+        # The points form a circle with radius r = sqrt(1)
+        # Expect: LIC1 is false 
         params["RADIUS1"] = 1
         self.assertFalse(Cmv(params, points, num_points).lic1())
 
         # Test Case 3:
         # Input: 
         # RADIUS1 is 5
-        # The points form a circle with radius r = sqrt(0.5)
-        # Expect: LIC0 is true 
+        # The points form a circle with radius r = sqrt(1)
+        # Expect: LIC1 is false 
         params["RADIUS1"] = 5
         self.assertFalse(Cmv(params, points, num_points).lic1())
 
@@ -201,25 +201,101 @@ class test_cmv(unittest.TestCase):
         # Test Case 4:
         # Input: 
         # RADIUS1 is 0.1
-        # The points form a circle with radius r = sqrt(0.5) and one with r=sqrt(6.5)
-        # Expect: LIC0 is true 
+        # The points form a circle with radius r = sqrt(1) and one with r=sqrt(2.61)
+        # Expect: LIC1 is true 
         params["RADIUS1"] = 0.1
         self.assertTrue(Cmv(params, points, num_points).lic1())
 
         # Test Case 5:
         # Input: 
         # RADIUS1 is 1
-        # The points form a circle with radius r = sqrt(0.5) and one with r=sqrt(6.5)
-        # Expect: LIC0 is true 
+        # The points form a circle with radius r = sqrt(1) and one with r=sqrt(2.61)
+        # Expect: LIC1 is true 
         params["RADIUS1"] = 1
-        self.assertTrue(Cmv(params, points, num_points).lic1())
+        self.assertFalse(Cmv(params, points, num_points).lic1())
 
-        # Test Case 5:
+        # Test Case 6:
         # Input: 
         # RADIUS1 is 2
-        # The points form a circle with radius r = sqrt(0.5) and one with r=sqrt(6.5)
-        # Expect: LIC0 is true 
+        # The points form a circle with radius r = sqrt(1) and one with r=sqrt(2.61)
+        # Expect: LIC1 is false 
         params["RADIUS1"] = 2
+        self.assertFalse(Cmv(params, points, num_points).lic1())
+
+
+        points = np.array([[1, 1],[1, 1],[1, 1]]) 
+        num_points = points.shape[0]
+
+        # Test Case 7:
+        # Input: 
+        # RADIUS1 is 2
+        # All points are the same
+        # Expect: LIC1 is false 
+        params["RADIUS1"] = 2
+        self.assertFalse(Cmv(params, points, num_points).lic1())
+
+
+        # Test Case 8:
+        # Input: 
+        # RADIUS1 is 0
+        # All points are the same
+        # Expect: LIC1 is false 
+        params["RADIUS1"] = 0
+        self.assertFalse(Cmv(params, points, num_points).lic1())
+
+        points = np.array([[1, 1],[1, 1],[1, 0]]) 
+        num_points = points.shape[0]
+
+        # Test Case 8:
+        # Input: 
+        # RADIUS1 is 0.1
+        # Two points are the same
+        # Expect: LIC1 is true 
+        params["RADIUS1"] = 0.1
+        self.assertTrue(Cmv(params, points, num_points).lic1())
+
+        # Test Case 9:
+        # Input: 
+        # RADIUS1 is 1
+        # Two points are the same
+        # Expect: LIC1 is false 
+        params["RADIUS1"] = 1
+        self.assertFalse(Cmv(params, points, num_points).lic1())
+
+        # Test Case 10:
+        # Input: 
+        # RADIUS1 is 2
+        # Two points are the same
+        # Expect: LIC1 is false 
+        params["RADIUS1"] = 2
+        self.assertFalse(Cmv(params, points, num_points).lic1())
+
+        points = np.array([[2, 5],[3, 5],[4, 5]]) 
+        num_points = points.shape[0]
+
+        # Test Case 11:
+        # Input: 
+        # RADIUS1 is 0.1
+        # Points are colinear
+        # Expect: LIC1 is true 
+        params["RADIUS1"] = 0.1
+        self.assertTrue(Cmv(params, points, num_points).lic1())
+
+        # Test Case 12:
+        # Input: 
+        # RADIUS1 is 1
+        # Points are colinear
+        # Expect: LIC1 is false 
+        params["RADIUS1"] = 1
+        self.assertFalse(Cmv(params, points, num_points).lic1())
+
+
+          # Test Case 13:
+        # Input: 
+        # RADIUS1 is 5
+        # Points are colinear
+        # Expect: LIC1 is false 
+        params["RADIUS1"] = 5
         self.assertFalse(Cmv(params, points, num_points).lic1())
 
     def test_lic_3(self) -> None:
