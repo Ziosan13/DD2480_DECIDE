@@ -161,13 +161,13 @@ class Cmv:
             BA = [x_i-x_i_plus_one,y_i-y_i_plus_one]
             BC = [x_i_plus_two-x_i_plus_one,y_i_plus_two-y_i_plus_one]
 
-            angle = np.arccos(np.dot(BA,BC)/(np.linalg.norm(BA)*(np.linalg.norm(BC))))
-
-            if angle < np.pi - self.epsilon:
-                return True
-            
-            elif angle > np.pi + self.epsilon:
-                return True
+            if not (BC==[0,0] or BA == [0,0]):
+                angle = np.arccos(np.around(np.dot(BA,BC)/(np.linalg.norm(BA)*(np.linalg.norm(BC))), 6))
+                if angle < np.pi - self.epsilon:
+                    return True
+                
+                elif angle > np.pi + self.epsilon:
+                    return True
         
         return False
 
