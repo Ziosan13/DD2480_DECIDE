@@ -107,6 +107,65 @@ class test_cmv(unittest.TestCase):
         params["LENGTH1"] = 4
         self.assertTrue(Cmv(params, points, num_points).lic0())
 
+    def test_lic_2(self):
+        params = self.parameters.copy()
+        points = np.array([[1, 1],[0, 0],[0, 1]]) 
+        num_points = points.shape[0]
+        
+        # Test Case 1:
+        # Input: 
+        # EPSILON is 0.0
+        # The points form an angle = pi/4
+        # Expect: LIC0 is true 
+        params["EPSILON"] = 0
+        self.assertTrue(Cmv(params, points, num_points).lic2())
+
+        # Test Case 2:
+        # Input: 
+        # EPSILON is 5pi/6
+        # The points form an angle = pi/4
+        # Expect: LIC0 is false 
+        params["EPSILON"] = 5*np.pi/6
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        points = np.array([[1, 0],[0, 0],[-1, 0]]) 
+        num_points = points.shape[0]
+        
+        # Test Case 3:
+        # Input: 
+        # EPSILON is 0
+        # The points form an angle = pi/2 
+        # Expect: LIC0 is false 
+        params["EPSILON"] = 0
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        points = np.array([[1, 0],[0, 0],[0, 1],[1,2]]) 
+        num_points = points.shape[0]
+
+        # Test Case 4:
+        # Input: 
+        # EPSILON is 0.1
+        # The points form an angle = pi/2 and angle = 3pi/4
+        # Expect: LIC0 is true 
+        params["EPSILON"] = 0.1
+        self.assertTrue(Cmv(params, points, num_points).lic2())
+
+        # Test Case 5:
+        # Input: 
+        # EPSILON is 4pi/5
+        # The points form an angle = pi/2 and angle = 3pi/4
+        # Expect: LIC0 is false 
+        params["EPSILON"] = 4*np.pi/5
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        # Test Case 6:
+        # Input: 
+        # EPSILON is 1.11
+        # The points form an angle = pi/2 and angle = 3pi/4
+        # Expect: LIC0 is true 
+        params["EPSILON"] = 1.11
+        self.assertTrue(Cmv(params, points, num_points).lic2())
+
     def test_lic_3(self) -> None:
         params = self.parameters.copy()
 
