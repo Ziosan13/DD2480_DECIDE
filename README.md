@@ -6,6 +6,7 @@ docker compose up
 docker compose down
 ```
 
+## Docs
 To generate documentation, first install dependencies with:
 ```
 pip install -r requirements.txt
