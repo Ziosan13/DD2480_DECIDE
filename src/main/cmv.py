@@ -73,7 +73,7 @@ class Cmv:
         if (self.radius1 < 0):
             raise ValueError(
                 'RADIUS1 parameter in parameters input must be positive.')
-        if (type(self.radius2) is not float) and (type(self.radius1) is not int):
+        if (type(self.radius2) is not float) and (type(self.radius2) is not int):
             raise TypeError(
                 'RADIUS2 parameter in parameters input must be a number.')
         if (self.radius2 < 0):
