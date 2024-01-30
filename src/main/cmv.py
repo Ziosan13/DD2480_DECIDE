@@ -69,7 +69,18 @@ class Cmv:
         # we can add more checks as we make the LICs
 
     def lic0(self):
-        pass
+        for i in range(len(self.points)-1):
+            x_i = self.points[i][0]
+            x_i_plus_one = self.points[i+1][0]
+            y_i = self.points[i][1]
+            y_i_plus_one = self.points[i+1][1]
+            
+            distance = np.sqrt((x_i-x_i_plus_one)**2+(y_i-y_i_plus_one)**2)
+
+            if distance > self.length1:
+                return True
+        
+        return False
 
     def lic1(self):
         pass
