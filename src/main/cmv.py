@@ -1,5 +1,5 @@
 import numpy as np
-
+import math
 
 class Cmv:
     """
@@ -113,7 +113,25 @@ class Cmv:
         pass
 
     def lic10(self):
-        pass
+        """
+        This LIC is True if exists at least one set of 
+        three data points separated by exactly E PTS and 
+        F PTS consecutive intervening points, respectively, 
+        that are the vertices of a triangle with area greater than AREA1. 
+        """
+        if self.num_points < 5 or self.e_pts < 1 or self.f_pts < 1 or (self.e_pts + self.f_pts + 2) > self.num_points:
+            return False
+        
+        else:
+            for i in range (self.num_points - (self.c_pts + self.d_pts + 2)):
+                p1 = self.points[i + self.c_pts +1]-self.points[i]
+                p2 = self.points[i + self.c_pts + self.d_pts +2]-self.points[i]
+                area=math.abs(p1[0]*p2[1]-p1[1]*p2[0])/2
+                if area>self.area1:
+                    return True
+            return False
+                
+
 
     def lic11(self):
         pass
