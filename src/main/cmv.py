@@ -84,6 +84,9 @@ class Cmv:
             raise TypeError('A_PTS and B_PTS parameters must be integers.')
         if (self.a_pts < 1 or self.b_pts < 1):
             raise ValueError('A_PTS and B_PTS must be greater than 1.')
+        if (self.e_pts < 1 or self.f_pts < 1):
+            raise ValueError('E_PTS and F_PTS must be greater than 1.')
+        
         # we can add more checks as we make the LICs
 
     def lic0(self):
@@ -357,7 +360,7 @@ class Cmv:
             for i in range (self.num_points - (self.c_pts + self.d_pts + 2)):
                 p1 = self.points[i + self.c_pts +1]-self.points[i]
                 p2 = self.points[i + self.c_pts + self.d_pts +2]-self.points[i]
-                area=math.abs(p1[0]*p2[1]-p1[1]*p2[0])/2
+                area=math.fabs(p1[0]*p2[1]-p1[1]*p2[0])/2
                 if area>self.area1:
                     return True
             return False
