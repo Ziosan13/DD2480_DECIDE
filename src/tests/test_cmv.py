@@ -232,6 +232,70 @@ class test_cmv(unittest.TestCase):
         num_points = points.shape[0]
         self.assertFalse(Cmv(params, points, num_points).lic4())
 
+    def test_lic_5(self) -> None:
+        params = self.parameters.copy()
+
+        # Test Case 1:
+        # Input:
+        # - points are 2 verticies with x1 > x2
+        # Expected behavior: LIC 5 is True.
+        points = np.array([
+            [2, 1],
+            [1, 1],
+        ])
+        num_points = points.shape[0]
+        self.assertTrue(Cmv(params, points, num_points).lic5())
+
+        # Test Case 2:
+        # Input:
+        # - points are 2 verticies with x1 = x2
+        # Expected behavior: LIC 5 is False.
+        points = np.array([
+            [1, 1],
+            [1, 1],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic5())
+
+        # Test Case 3:
+        # Input:
+        # - points are 2 verticies with x1 < x2
+        # Expected behavior: LIC 5 is False.
+        points = np.array([
+            [1, 1],
+            [2, 1],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic5())
+
+        # Test Case 4:
+        # Input:
+        # - points are 5 verticies with x1 < x2 < x3 < x4 < x5
+        # Expected behavior: LIC 5 is False.
+        points = np.array([
+            [1, 1],
+            [2, 1],
+            [3, 1],
+            [4, 1],
+            [5, 1],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic5())
+
+        # Test Case 5:
+        # Input:
+        # - points are 5 verticies with x1 < x2 > x3 < x4 < x5
+        # Expected behavior: LIC 5 is True.
+        points = np.array([
+            [1, 1],
+            [2, 1],
+            [1, 1],
+            [3, 1],
+            [4, 1],
+        ])
+        num_points = points.shape[0]
+        self.assertTrue(Cmv(params, points, num_points).lic5())
+        
 
 if __name__ == '__main__':
     unittest.main()

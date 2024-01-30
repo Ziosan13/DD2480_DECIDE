@@ -123,10 +123,16 @@ class Cmv:
         return False
             
 
-
-
     def lic5(self):
-        pass
+        """
+        This LIC is True if there exists at least one set of
+        two consecutive data points, (X[i], Y[i]) and (X[j], Y[j]),
+        such that X[j] - X[i] < 0. 
+        """
+        for i in range(self.num_points - 1):
+            if self.points[i+1][0] - self.points[i][0] < 0:
+                return True
+        return False
 
     def lic6(self):
         pass
