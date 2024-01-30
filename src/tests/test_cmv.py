@@ -362,6 +362,264 @@ class test_cmv(unittest.TestCase):
             params['AREA1'] = "hi"
             Cmv(params, points, num_points).lic3()
 
+    def test_lic_8(self) -> None:
+        params = self.parameters.copy()
+
+        points = np.array([
+            [6, 5],
+            [3, 6],
+            [1, 1],
+            [12, 10],
+            [7, 5],
+            [5, 6],
+            [1, 5],
+            [4, 8],
+            [1, 3],
+            [7, 4],
+            [5, 5],
+            [4, 1]]
+        )
+
+        colinear_points = np.array([
+            [6, 5],
+            [3, 6],
+            [2.5, 3],
+            [12, 10],
+            [7, 5],
+            [5, 6],
+            [1, 5],
+            [4, 8],
+            [1, 3],
+            [7, 4],
+            [5, 5],
+            [4, 1]]
+        )
+
+        combined_points = np.array([
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5],
+            [6, 5]]
+        )
+
+        num_points = points.shape[0]
+
+        # Test Case 1:
+        # Input:
+        # - RADIUS1 is strictly greater than 2.5
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.6
+        self.assertFalse(Cmv(params, points, num_points).lic8())
+
+        # Test Case 2:
+        # Input:
+        # - RADIUS1 is equal to 2.5
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.5
+        self.assertFalse(Cmv(params, points, num_points).lic8())
+
+        # Test Case 3:
+        # Input:
+        # - RADIUS1 is strictly less than 2.5
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: LIC 8 is True.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.4
+        self.assertTrue(Cmv(params, points, num_points).lic8())
+
+        # Test Case 4:
+        # Input:
+        # - NUMPOINTS is strictly less than 5
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, np.array([[1, 1]]), 1).lic8())
+
+        # Test Case 5:
+        # Input:
+        # - RADIUS1 is greater than 0.0
+        # - points have the same coordinates
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 0.1
+        self.assertFalse(Cmv(params, combined_points, num_points).lic8())
+
+        # Test Case 6:
+        # Input:
+        # - RADIUS1 is equal to 0.0
+        # - points have the same coordinates
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, combined_points, num_points).lic8())
+
+        # Test Case 7:
+        # Input:
+        # - RADIUS1 is strictly less than 2.5
+        # - points at indices 2, 6, 11
+        #   are colinear and the maximum
+        #   distance between them is 5.0
+        # Expected behavior: LIC 8 is True.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.4
+        self.assertTrue(Cmv(params, colinear_points, num_points).lic8())
+
+        # Test Case 8:
+        # Input:
+        # - RADIUS1 is equal to 2.5
+        # - points at indices 2, 6, 11
+        #   are colinear and the maximum
+        #   distance between them is 5.0
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.5
+        self.assertFalse(Cmv(params, colinear_points, num_points).lic8())
+
+        # Test Case 9:
+        # Input:
+        # - RADIUS1 is strictly greater than 2.5
+        # - points at indices 2, 6, 11
+        #   are colinear and the maximum
+        #   distance between them is 5.0
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 3
+        params['B_PTS'] = 4
+        params['RADIUS1'] = 2.6
+        self.assertFalse(Cmv(params, colinear_points, num_points).lic8())
+
+        # Test Case 10:
+        # Input:
+        # - A_PTS is negative
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = -1
+            params['B_PTS'] = 1
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 11:
+        # Input:
+        # - B_PTS is negative
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = -1
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 12:
+        # Input:
+        # - RADIUS1 is negative
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = 1
+            params['RADIUS1'] = -1.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 13:
+        # Input:
+        # - A_PTS is a float
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises TypeError.
+        with self.assertRaises(TypeError):
+            params['A_PTS'] = 1.0
+            params['B_PTS'] = 1
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 14:
+        # Input:
+        # - B_PTS is a float
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises TypeError.
+        with self.assertRaises(TypeError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = 1.0
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 15:
+        # Input:
+        # - RADIUS1 is not a number
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises TypeError.
+        with self.assertRaises(TypeError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = 1
+            params['RADIUS1'] = "hi"
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 16:
+        # Input:
+        # - A_PTS is strictly less than 1
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = 0
+            params['B_PTS'] = 1
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
+        # Test Case 17:
+        # Input:
+        # - B_PTS is strictly less than 1
+        # - points at indices 2, 6, 11
+        #   form a 3-4-5 triangle that is contained
+        #   in a circle of radius 2.5
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            params['A_PTS'] = 1
+            params['B_PTS'] = 0
+            params['RADIUS1'] = 0.0
+            Cmv(params, points, num_points).lic8()
+
     #Tests if LIC9 returns true when angle falls within range < (PI - epsilon) or > (pI + epsilon)
     def test_lic9_true(self):
         test_points = np.array([

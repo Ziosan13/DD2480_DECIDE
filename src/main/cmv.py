@@ -1,5 +1,6 @@
 import numpy as np
-
+from functools import reduce
+from math import isclose
 
 class Cmv:
     """
@@ -66,6 +67,16 @@ class Cmv:
         if (self.area1 < 0):
             raise ValueError(
                 'AREA1 parameter in parameters input must be positive.')
+        if (type(self.radius1) is not float) and (type(self.radius1) is not int):
+            raise TypeError(
+                'RADIUS1 parameter in parameters input must be a number.')
+        if (self.radius1 < 0):
+            raise ValueError(
+                'RADIUS1 parameter in parameters input must be positive.')
+        if (type(self.a_pts) is not int) or (type(self.b_pts) is not int):
+            raise TypeError('A_PTS and B_PTS parameters must be integers.')
+        if (self.a_pts < 1 or self.b_pts < 1):
+            raise ValueError('A_PTS and B_PTS must be greater than 1.')
         # we can add more checks as we make the LICs
 
     def lic0(self):
@@ -185,7 +196,48 @@ class Cmv:
         pass
 
     def lic8(self):
-        pass
+        """
+        This LIC is True if there exists at least one 
+        set of three data points separated by exactly A PTS and B PTS 
+        consecutive intervening points, respectively, 
+        that cannot be contained within or on a circle of radius RADIUS1. 
+        The condition is not met when NUMPOINTS < 5.
+
+        Conditions on parameters: 
+        - (0 <= RADIUS1)
+        - (1 <= A_PTS)
+        - (1 <= B_PTS)
+        - (A_PTS + B_PTS <= (NUMPOINTS - 3))
+        """
+
+        if self.num_points < 5:
+            return False
+        
+        for i in range(self.num_points - (self.a_pts + self.b_pts) - 2):
+            points_of_interest = np.array(
+                [self.points[i], self.points[i + (self.a_pts + 1)], self.points[i + (self.a_pts + self.b_pts + 2)]])
+            
+            # Colinear points
+            if isclose(np.linalg.det(np.vstack([points_of_interest.T, np.ones((1, 3))])), 0, abs_tol=1e-9):
+                norms = np.array([[np.linalg.norm(points_of_interest[i] - points_of_interest[j])
+                                    for i in range(points_of_interest.shape[0])] for j in range(points_of_interest.shape[0])])
+                if np.max(norms) > 2*self.radius1:
+                    return True
+                else:
+                    continue
+            
+            delta = np.linalg.det(np.c_[points_of_interest, np.ones((3, 1))])
+            x_matrix = np.c_[np.array(
+                [p[0]*p[0] + p[1]*p[1] for p in points_of_interest]), points_of_interest[:, 1], np.ones((3, 1))]
+            y_matrix = np.c_[np.array(
+                [p[0]*p[0] + p[1]*p[1] for p in points_of_interest]), points_of_interest[:, 0], np.ones((3, 1))]
+            x_circumcenter = (1/(2*delta))*np.linalg.det(x_matrix)
+            y_circumcenter = -(1/(2*delta))*np.linalg.det(y_matrix)
+            circumcenter = np.array([x_circumcenter, y_circumcenter])
+            if reduce(lambda acc, p: acc and (np.linalg.norm(p - circumcenter) > self.radius1), points_of_interest, np.linalg.norm(points_of_interest[0] - circumcenter) > self.radius1):
+                return True
+            
+        return False
 
     def lic9(self):
         """
