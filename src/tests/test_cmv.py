@@ -295,7 +295,196 @@ class test_cmv(unittest.TestCase):
         ])
         num_points = points.shape[0]
         self.assertTrue(Cmv(params, points, num_points).lic5())
+
+    def test_lic_6(self) -> None:
+        params = self.parameters.copy()
+
+        # Test Case 1:
+        # Input:
+        # - N_PTS is an int with value 3
+        # - DIST is an int with value 1
+        # - points are 3 verticies with distance between the line
+        #   between the first and last vertex and the middle vertex
+        #   equal to 2: (0,0), (2,2), (4,0).
+        # - NUMPOINTS is an int with value 3
+        # Expected behavior: LIC 6 is True.
+        params['N_PTS'] = 3
+        params['DIST'] = 1
+        points = np.array([
+            [0, 0],
+            [2, 2],
+            [4, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertTrue(Cmv(params, points, num_points).lic6())
+
+        # Test Case 2:
+        # Input:
+        # - N_PTS is an int with value 3
+        # - DIST is an int with value 1
+        # - points are 3 verticies with distance between the line
+        #   between the first and last vertex and the middle vertex
+        #   equal to 1: (0,0), (2,1), (4,0).
+        # - NUMPOINTS is an int with value 3
+        # Expected behavior: LIC 6 is False.
+        params['N_PTS'] = 3
+        params['DIST'] = 1
+        points = np.array([
+            [0, 0],
+            [2, 1],
+            [4, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic6())
+
+        # Test Case 3:
+        # Input:
+        # - N_PTS is an int with value 3
+        # - DIST is an int with value 2
+        # - points are 3 verticies with distance between the line
+        #   between the first and last vertex and the middle vertex
+        #   equal to 1: (0,0), (2,1), (4,0).
+        # - NUMPOINTS is an int with value 3
+        # Expected behavior: LIC 6 is False.
+        params['N_PTS'] = 3
+        params['DIST'] = 2
+        points = np.array([
+            [0, 0],
+            [2, 1],
+            [4, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic6())
+
+        # Test Case 4:
+        # Input:
+        # - N_PTS is an int with value 5
+        # - DIST is an int with value 1
+        # - points are 5 verticies all on a straight line:
+        #   (0,0), (1,0), (2,0), (3,0), (4,0).
+        # - NUMPOINTS is an int with value 5
+        # Expected behavior: LIC 6 is False.
+        params['N_PTS'] = 5
+        params['DIST'] = 1
+        points = np.array([
+            [0, 0],
+            [1, 0],
+            [2, 0],
+            [3, 0],
+            [4, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic6())
+
+        # Test Case 5:
+        # Input:
+        # - N_PTS is an int with value 5
+        # - DIST is an int with value 1
+        # - points are 5 verticies all on a straight line,
+        #   except for the third vertex which is at a distance
+        #   of 2 from the line between the first and last vertex:
+        #   (0,0), (1,0), (2,2), (3,0), (4,0).
+        # - NUMPOINTS is an int with value 5
+        # Expected behavior: LIC 6 is True.
+        params['N_PTS'] = 5
+        params['DIST'] = 1
+        points = np.array([
+            [0, 0],
+            [1, 0],
+            [2, 2],
+            [3, 0],
+            [4, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertTrue(Cmv(params, points, num_points).lic6())
+
+        # Test Case 6:
+        # Input:
+        # - N_PTS is an int with value 3
+        # - DIST is an int with value 1
+        # - points are 3 verticies where p1 = p3:
+        #   (0,0), (2,0), (0,0).
+        # - NUMPOINTS is an int with value 3
+        # Expected behavior: LIC 6 is True.
+        params['N_PTS'] = 3
+        params['DIST'] = 1
+        points = np.array([
+            [0, 0],
+            [2, 0],
+            [0, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertTrue(Cmv(params, points, num_points).lic6())
+
+        # Test Case 7:
+        # Input:
+        # - N_PTS is an int with value 3
+        # - DIST is an int with value 1
+        # - points are 3 verticies where p1 = p3:
+        #   (0,0), (1,0), (0,0).
+        # - NUMPOINTS is an int with value 3
+        # Expected behavior: LIC 6 is False.
+        params['N_PTS'] = 3
+        params['DIST'] = 1
+        points = np.array([
+            [0, 0],
+            [1, 0],
+            [0, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic6())
+
+        # Test Case 8:
+        # Input:
+        # - N_PTS is an int with value 2
+        # - DIST is an int with value 1
+        # - points are 2 verticies: (0,0), (1,0).
+        # - NUMPOINTS is an int with value 2
+        # Expected behavior: LIC 6 is False.
+        params['N_PTS'] = 2
+        params['DIST'] = 1
+        points = np.array([
+            [0, 0],
+            [1, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic6())
+
+        # Test Case 9:
+        # Input:
+        # - N_PTS is an int with value 4
+        # - DIST is an int with value 1
+        # - points are 3 verticies: (0,0), (1,0), (2,0).
+        # - NUMPOINTS is an int with value 3
+        # Expected behavior: LIC 6 is False.
+        params['N_PTS'] = 4
+        params['DIST'] = 1
+        points = np.array([
+            [0, 0],
+            [1, 0],
+            [2, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic6())
+
+        # Test Case 10:
+        # Input:
+        # - N_PTS is an int with value 3
+        # - DIST is an int with value 0
+        # - points are 3 verticies: (0,0), (1,0), (2,0).
+        # - NUMPOINTS is an int with value 3
+        # Expected behavior: LIC 6 is False.
+        params['N_PTS'] = 3
+        params['DIST'] = 0
+        points = np.array([
+            [0, 0],
+            [1, 0],
+            [2, 0],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic6())
         
+
 
 if __name__ == '__main__':
     unittest.main()

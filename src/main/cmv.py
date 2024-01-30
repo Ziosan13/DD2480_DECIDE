@@ -135,7 +135,30 @@ class Cmv:
         return False
 
     def lic6(self):
-        pass
+        """
+        This LIC is True if there exists at least one set of
+        N_PTS consecutive data points such that at least one of
+        the points lies a distance greater than DIST from the
+        line joining the first and last of these N_PTS points.
+        If the first point = last point, then the distance
+        is calculated as the distance between this point
+        and the other points respectively.
+        
+        If NUMPOINTS < 3 or 3 <= N_PTS <= NUMPOINTS or DIST <= 0,
+        the LIC is false.
+        """
+        if self.num_points < 3 or self.n_pts < 3 or self.n_pts > self.num_points or self.dist <= 0:
+            return False
+        for i in range(self.num_points - self.n_pts + 1):
+            if np.linalg.norm(self.points[i] - self.points[i+self.n_pts-1]) == 0:
+                for j in range(i+1, i+self.n_pts-1):
+                    if np.linalg.norm(self.points[j] - self.points[i]) > self.dist:
+                        return True
+            else:
+                for j in range(i+1, i+self.n_pts-1):
+                    if np.linalg.norm(np.cross(self.points[i+self.n_pts-1] - self.points[i], self.points[j] - self.points[i])) / np.linalg.norm(self.points[i+self.n_pts-1] - self.points[i]) > self.dist:
+                        return True
+
 
     def lic7(self):
         pass
