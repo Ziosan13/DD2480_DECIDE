@@ -80,13 +80,46 @@ class Cmv:
         # we can add more checks as we make the LICs
 
     def lic0(self):
-        pass
+        for i in range(len(self.points)-1):
+            x_i = self.points[i][0]
+            x_i_plus_one = self.points[i+1][0]
+            y_i = self.points[i][1]
+            y_i_plus_one = self.points[i+1][1]
+            
+            distance = np.sqrt((x_i-x_i_plus_one)**2+(y_i-y_i_plus_one)**2)
+
+            if distance > self.length1:
+                return True
+        
+        return False
 
     def lic1(self):
         pass
 
     def lic2(self):
-        pass
+        for i in range(self.num_points-2):
+            x_i = self.points[i][0]
+            x_i_plus_one = self.points[i+1][0]
+            x_i_plus_two = self.points[i+2][0]
+            y_i = self.points[i][1]
+            y_i_plus_one = self.points[i+1][1]
+            y_i_plus_two = self.points[i+2][1]
+
+            BA = [x_i-x_i_plus_one,y_i-y_i_plus_one]
+            BC = [x_i_plus_two-x_i_plus_one,y_i_plus_two-y_i_plus_one]
+
+            angle = np.arccos(np.dot(BA,BC)/(np.linalg.norm(BA)*(np.linalg.norm(BC))))
+
+            if angle < np.pi - self.epsilon:
+                return True
+            
+            elif angle > np.pi + self.epsilon:
+                return True
+        
+        return False
+
+            
+ 
 
     def lic3(self):
         """
@@ -162,8 +195,45 @@ class Cmv:
         return False
 
     def lic9(self):
-        pass
+        """
+        There exists at least one set of three data points separated 
+        by exactly C PTS and D PTS consecutive intervening points, 
+        respectively, that form an angle such that:
 
+        angle < (PI − EPSILON) or angle > (PI + EPSILON)
+
+        The second point of the set of three points is always the vertex of the angle.
+        If either of the other points coincide with the vertex, the angle is disregarded.
+
+        Conditions on parameters: 
+        1≤C PTS,1≤D PTS
+        C PTS+D PTS ≤ NUMPOINTS−3
+        """
+        lic_passed = False
+
+        if (self.c_pts > 0 and self.d_pts > 0 and self.num_points >= 5):
+
+            for i in range (self.num_points - (self.c_pts + self.d_pts + 2)):
+                p1 = self.points[i]
+                p2 = self.points[i + self.c_pts +1]
+                p3 = self.points[i + self.c_pts + self.d_pts +2]
+
+                if ((p2[0] == p1[0] and p2[1] == p1[1]) or (p2[0] == p3[0] and p2[1] == p3[1])):
+                    continue
+
+                vector1 = p2 - p1
+                vector2 = p2 - p3
+                dot_product = np.dot(vector1,vector2)
+                norm1 = np.linalg.norm(vector1)
+                norm2 = np.linalg.norm(vector2)
+
+                angle = np.arccos(dot_product/(norm1 * norm2))
+
+                if(angle < (np.pi - self.epsilon) or angle > (np.pi + self.epsilon)):
+                    lic_passed = True
+                
+        return lic_passed
+                    
     def lic10(self):
         pass
 

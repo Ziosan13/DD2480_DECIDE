@@ -34,8 +34,137 @@ class test_cmv(unittest.TestCase):
         #lcm = rng.random((15,15))
         #puv = rng.random((15))
 
-        # Initialize Decide instance
-        self.cmv = Cmv(self.parameters, points, num_points)
+    def test_lic_0(self):
+        params = self.parameters.copy()
+        points = np.array([[1, 1],[1, 2],[3, 2]]) # odd number of points 
+        num_points = points.shape[0]
+        
+        # Test Case 1:
+        # Input: 
+        # LENGTH1 is 0.0
+        # The first pair of points are 1 unit apart, the second is 2 units apart 
+        # Expect: LIC0 is true 
+        params["LENGTH1"] = 0
+        self.assertTrue(Cmv(params, points, num_points).lic0())
+
+        # Test Case 2:
+        # Input: 
+        # LENGTH1 is 0.1
+        # The first pair of points are 1 unit apart, the second is 2 units apart 
+        # Expect: LIC0 is true 
+        params["LENGTH1"] = 0.1
+        self.assertTrue(Cmv(params, points, num_points).lic0())
+
+        # Test Case 3:
+        # Input: 
+        # LENGTH1 is 1.5
+        # The first pair of points are 1 unit apart, the second is 2 units apart 
+        # Expect: LIC0 is true 
+        params["LENGTH1"] = 1.5
+        self.assertTrue(Cmv(params, points, num_points).lic0())
+
+         # Test Case 4:
+        # Input: 
+        # LENGTH1 is 2
+        # The first pair of points are 1 unit apart, the second is 2 units apart 
+        # Expect: LIC0 is false 
+        params["LENGTH1"] = 2
+        self.assertFalse(Cmv(params, points, num_points).lic0())
+
+        # Test Case 5:
+        # Input: 
+        # LENGTH1 is 3
+        # The first pair of points are 1 unit apart, the second is 2 units apart 
+        # Expect: LIC0 is false 
+        params["LENGTH1"] = 3
+        self.assertFalse(Cmv(params, points, num_points).lic0())
+
+
+        points = np.array([[1, 1],[1, 3],[3, 3],[0,0]]) # even number of points
+        num_points = points.shape[0]
+
+         # Test Case 6:
+        # Input: 
+        # LENGTH1 is 1
+        # The first pair of points are 2 units apart, the second is 1 unit apart, the third is 3.61 units apart  
+        # Expect: LIC0 is true 
+        params["LENGTH1"] = 1
+        self.assertTrue(Cmv(params, points, num_points).lic0())
+
+        # Test Case 7:
+        # Input: 
+        # LENGTH1 is 2
+        # The first pair of points are 1 unit apart, the second is 2 units apart, the third is 3.61 units apart
+        # Expect: LIC0 is true 
+        params["LENGTH1"] = 2
+        self.assertTrue(Cmv(params, points, num_points).lic0())
+
+        # Test Case 8:
+        # Input: 
+        # LENGTH1 is 4
+        # The first pair of points are 1 unit apart, the second is 2 units apart, the third is 3.61 units apart 
+        # Expect: LIC0 is false 
+        params["LENGTH1"] = 4
+        self.assertTrue(Cmv(params, points, num_points).lic0())
+
+    def test_lic_2(self):
+        params = self.parameters.copy()
+        points = np.array([[1, 1],[0, 0],[0, 1]]) 
+        num_points = points.shape[0]
+        
+        # Test Case 1:
+        # Input: 
+        # EPSILON is 0.0
+        # The points form an angle = pi/4
+        # Expect: LIC0 is true 
+        params["EPSILON"] = 0
+        self.assertTrue(Cmv(params, points, num_points).lic2())
+
+        # Test Case 2:
+        # Input: 
+        # EPSILON is 5pi/6
+        # The points form an angle = pi/4
+        # Expect: LIC0 is false 
+        params["EPSILON"] = 5*np.pi/6
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        points = np.array([[1, 0],[0, 0],[-1, 0]]) 
+        num_points = points.shape[0]
+        
+        # Test Case 3:
+        # Input: 
+        # EPSILON is 0
+        # The points form an angle = pi/2 
+        # Expect: LIC0 is false 
+        params["EPSILON"] = 0
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        points = np.array([[1, 0],[0, 0],[0, 1],[1,2]]) 
+        num_points = points.shape[0]
+
+        # Test Case 4:
+        # Input: 
+        # EPSILON is 0.1
+        # The points form an angle = pi/2 and angle = 3pi/4
+        # Expect: LIC0 is true 
+        params["EPSILON"] = 0.1
+        self.assertTrue(Cmv(params, points, num_points).lic2())
+
+        # Test Case 5:
+        # Input: 
+        # EPSILON is 4pi/5
+        # The points form an angle = pi/2 and angle = 3pi/4
+        # Expect: LIC0 is false 
+        params["EPSILON"] = 4*np.pi/5
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        # Test Case 6:
+        # Input: 
+        # EPSILON is 1.11
+        # The points form an angle = pi/2 and angle = 3pi/4
+        # Expect: LIC0 is true 
+        params["EPSILON"] = 1.11
+        self.assertTrue(Cmv(params, points, num_points).lic2())
 
     def test_lic_3(self) -> None:
         params = self.parameters.copy()
@@ -434,6 +563,63 @@ class test_cmv(unittest.TestCase):
             params['B_PTS'] = 0
             params['RADIUS1'] = 0.0
             Cmv(params, points, num_points).lic8()
+
+    #Tests if LIC9 returns true when angle falls within range < (PI - epsilon) or > (pI + epsilon)
+    def test_lic9_true(self):
+        test_points = np.array([
+                        [5.0, 2.0],
+                        [8.0, 6.0],
+                        [3.0, -2.0],
+                        [2.0, 2.0],
+                        [1.0,3.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0,1.0],
+                        [1.0, 2.0],
+                        [5.0,2.0]
+                    ])
+
+        parameters_changed = self.parameters.copy()
+        parameters_changed["C_PTS"] = 2
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic9()
+        self.assertTrue(result)
+
+    #Tests that LIC 9 returns false if there is no angle that falls within the range < (PI - epsilon) or > (PI + epsilon)
+    def test_lic9_false_epsilon_not_met(self):
+        test_points = np.array([
+                        [1.0, 0.0],
+                        [2.0, 6.0],
+                        [3.0, 3.0],
+                        [6.0, 4.0],
+                        [5.0,0.0],
+                        [2.0, -2.0]
+                    ])
+
+        parameters_changed = self.parameters.copy()
+        parameters_changed["EPSILON"] = np.pi - 1
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic9()
+        self.assertFalse(result)
+
+    #Tests that points that coincide with the vertex are not used to calculate the LIC
+    def test_lic9_false_all_points_coincide(self):
+        test_points = np.array([
+                        [1.0, 0.0],
+                        [2.0, 6.0],
+                        [1.0, 0.0],
+                        [6.0, 4.0],
+                        [1.0, 0.0],
+                    ])
+
+        parameters_changed = self.parameters.copy()
+        parameters_changed["EPSILON"] = np.pi - 1
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic9()
+        self.assertFalse(result)
 
 if __name__ == '__main__':
     unittest.main()
