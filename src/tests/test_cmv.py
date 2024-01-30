@@ -116,7 +116,7 @@ class test_cmv(unittest.TestCase):
         # Input: 
         # EPSILON is 0.0
         # The points form an angle = pi/4
-        # Expect: LIC0 is true 
+        # Expect: LIC2 is true 
         params["EPSILON"] = 0
         self.assertTrue(Cmv(params, points, num_points).lic2())
 
@@ -124,7 +124,7 @@ class test_cmv(unittest.TestCase):
         # Input: 
         # EPSILON is 5pi/6
         # The points form an angle = pi/4
-        # Expect: LIC0 is false 
+        # Expect: LIC2 is false 
         params["EPSILON"] = 5*np.pi/6
         self.assertFalse(Cmv(params, points, num_points).lic2())
 
@@ -135,7 +135,7 @@ class test_cmv(unittest.TestCase):
         # Input: 
         # EPSILON is 0
         # The points form an angle = pi/2 
-        # Expect: LIC0 is false 
+        # Expect: LIC2 is false 
         params["EPSILON"] = 0
         self.assertFalse(Cmv(params, points, num_points).lic2())
 
@@ -146,7 +146,7 @@ class test_cmv(unittest.TestCase):
         # Input: 
         # EPSILON is 0.1
         # The points form an angle = pi/2 and angle = 3pi/4
-        # Expect: LIC0 is true 
+        # Expect: LIC2 is true 
         params["EPSILON"] = 0.1
         self.assertTrue(Cmv(params, points, num_points).lic2())
 
@@ -154,7 +154,7 @@ class test_cmv(unittest.TestCase):
         # Input: 
         # EPSILON is 4pi/5
         # The points form an angle = pi/2 and angle = 3pi/4
-        # Expect: LIC0 is false 
+        # Expect: LIC2 is false 
         params["EPSILON"] = 4*np.pi/5
         self.assertFalse(Cmv(params, points, num_points).lic2())
 
@@ -162,9 +162,48 @@ class test_cmv(unittest.TestCase):
         # Input: 
         # EPSILON is 1.11
         # The points form an angle = pi/2 and angle = 3pi/4
-        # Expect: LIC0 is true 
+        # Expect: LIC2 is true 
         params["EPSILON"] = 1.11
         self.assertTrue(Cmv(params, points, num_points).lic2())
+
+        points = np.array([[1, 1],[1, 1],[1, 1]]) 
+        num_points = points.shape[0]
+
+        # Test Case 7:
+        # Input: 
+        # EPSILON is 1
+        # All points are the same
+        # Expect: LIC2 is false 
+        params["EPSILON"] = 1
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        # Test Case 8:
+        # Input: 
+        # EPSILON is 0
+        # All points are the same
+        # Expect: LIC2 is false 
+        params["EPSILON"] = 0
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        points = np.array([[0, 1],[1, 1],[1, 1]]) 
+        num_points = points.shape[0]
+
+        # Test Case 9:
+        # Input: 
+        # EPSILON is 1
+        # Two points are the same
+        # Expect: LIC2 is false 
+        params["EPSILON"] = 1
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+
+        # Test Case 10:
+        # Input: 
+        # EPSILON is 1
+        # Two points are the same
+        # Expect: LIC2 is false 
+        params["EPSILON"] = 1
+        self.assertFalse(Cmv(params, points, num_points).lic2())
 
     def test_lic_1(self):
         params = self.parameters.copy()
