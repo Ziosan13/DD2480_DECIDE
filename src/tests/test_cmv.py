@@ -232,6 +232,37 @@ class test_cmv(unittest.TestCase):
         num_points = points.shape[0]
         self.assertFalse(Cmv(params, points, num_points).lic4())
 
+        # Test Case 4:
+        # Input:
+        # - Q_PTS is an int with value 4
+        # - points are 2 verticies all in quadrant 1
+        # - QUADS is an int with value 3
+        # Expected behavior: LIC 4 is False.
+        params['Q_PTS'] = 4
+        params['QUADS'] = 3
+        points = np.array([
+            [1, 1],
+            [2, 1],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic4())
+
+        # Test Case 5:
+        # Input:
+        # - Q_PTS is an int with value 2
+        # - points are 3 verticies all in quadrant 1
+        # - QUADS is an int with value 5
+        # Expected behavior: LIC 4 is False.
+        params['Q_PTS'] = 2
+        params['QUADS'] = 5
+        points = np.array([
+            [1, 1],
+            [2, 1],
+            [1, 2],
+        ])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic4())
+
     def test_lic_5(self) -> None:
         params = self.parameters.copy()
 
@@ -483,7 +514,7 @@ class test_cmv(unittest.TestCase):
         ])
         num_points = points.shape[0]
         self.assertFalse(Cmv(params, points, num_points).lic6())
-        
+
 
 
 if __name__ == '__main__':
