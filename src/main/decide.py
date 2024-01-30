@@ -1,5 +1,5 @@
 import numpy as np
-
+from main.cmv import Cmv
 
 class Decide:
     """
@@ -35,7 +35,7 @@ class Decide:
         on input radar tracking information.
     """
 
-    def __init__(self, numpoints: int, points: np.ndarray, parameters: dict, lcm: np.ndarray, puv: np.ndarray) -> None:
+    def __init__(self, numpoints: int, points: np.ndarray, parameters: dict, lcm, puv) -> None:
         """
         Assigns given inputs to corresponding attributes 
         and initializes the outputs to their correct data type.
@@ -62,10 +62,53 @@ class Decide:
         self.puv = puv
 
         # Outputs initialization
-        self.cmv = np.zeros(15, dtype="bool_")
+        self.cmv = Cmv(parameters, points, numpoints)
         self.pum = np.zeros((15, 15))
         self.fuv = np.zeros(15, dtype="bool_")
         self.launch = False
+
+    def load_lcm_from_file(self, file_path : str) -> None:
+        """
+        Generates an LCM matrix from a txt file 
+        and assigns it to the current instance.
+        The txt file must contain 15x15 values
+        among 0 (for NOTUSED), 1 (for ORR) 
+        and 2 (for ANDD). The matrix must 
+        be symmetric (LCM == LCM.T).
+
+        Parameters
+        ----------
+        file_path: str
+            path to the txt file
+        """
+        lcm = []
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+        for line in lines:
+            row = []
+            for char in line:
+                if (char != '\n'):
+                    match int(char):
+                        case 0:
+                            row.append('NOTUSED')
+                        case 1:
+                            row.append('ORR')
+                        case 2:
+                            row.append('ANDD')
+                        case _:
+                            raise ValueError("Wrong value in provided file.")
+                        
+            lcm.append(row)
+
+        lcm = np.array(lcm)
+        if (lcm.shape != (15, 15)):
+            raise ValueError('Wrong shape for LCM matrix. Check the provided file.')
+        if not (lcm == lcm.T).all():
+            raise ValueError('LCM matrix is not symmetric. Check the provided file.')
+        
+        self.lcm = lcm
+
 
     def decide(self) -> None:
         """
