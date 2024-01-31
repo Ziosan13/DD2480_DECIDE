@@ -256,7 +256,7 @@ class Cmv:
 
         if ((self.num_points >= 3) and (self.k_pts >= 1)):
             for i in range(self.num_points - (self.k_pts + 1)):
-                
+
                 p1 = self.points[i]
                 p2 = self.points[i + self.k_pts + 1]
                 distance = math.dist(p1,p2)
@@ -357,8 +357,28 @@ class Cmv:
     def lic10(self):
         pass
 
+    
     def lic11(self):
-        pass
+        """
+        There exists at least one set of two data points, 
+        (X[i],Y[i])and (X[j],Y[j]), 
+        separated by exactly G PTS consecutive intervening points,
+        such that X[j] - X[i] < 0. (where i < j )
+
+        Conditions on parameters: 
+        1 ≤ G PTS ≤ NUMPOINTS−2
+        """
+        lic_passed = False
+        j = self.g_pts + 1
+
+        if(self.num_points >=3 ):
+            for i in range(self.num_points - j):
+                x_1 = self.points[i][0]
+                x_2 = self.points[i+j][0]
+                
+                if(x_2 - x_1 < 0):
+                    lic_passed = True
+        return lic_passed
 
     def lic12(self):
         pass
