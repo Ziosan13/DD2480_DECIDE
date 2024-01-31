@@ -37,7 +37,6 @@ class Cmv:
         self.num_points = num_points
 
         self.cmv = np.zeros(15, dtype="bool_")
-        self.check_parameters()
         self.cmv_calc()
 
     def cmv_calc(self):
@@ -57,35 +56,6 @@ class Cmv:
         self.cmv[13] = self.lic13()
         self.cmv[14] = self.lic14()
         return self.cmv
-    
-    def check_parameters(self):
-        """
-        Checks that parameters are well-formed.
-        Raises exceptions otherwise.
-        """
-        if (type(self.area1) is not float) and (type(self.area1) is not int):
-            raise TypeError(
-                'AREA1 parameter in parameters input must be a number.')
-        if (self.area1 < 0):
-            raise ValueError(
-                'AREA1 parameter in parameters input must be positive.')
-        if (type(self.radius1) is not float) and (type(self.radius1) is not int):
-            raise TypeError(
-                'RADIUS1 parameter in parameters input must be a number.')
-        if (self.radius1 < 0):
-            raise ValueError(
-                'RADIUS1 parameter in parameters input must be positive.')
-        if (type(self.radius2) is not float) and (type(self.radius2) is not int):
-            raise TypeError(
-                'RADIUS2 parameter in parameters input must be a number.')
-        if (self.radius2 < 0):
-            raise ValueError(
-                'RADIUS2 parameter in parameters input must be positive.')
-        if (type(self.a_pts) is not int) or (type(self.b_pts) is not int):
-            raise TypeError('A_PTS and B_PTS parameters must be integers.')
-        if (self.a_pts < 1 or self.b_pts < 1):
-            raise ValueError('A_PTS and B_PTS must be greater than 1.')
-        # we can add more checks as we make the LICs
 
     def lic0(self):
         for i in range(len(self.points)-1):
@@ -102,6 +72,10 @@ class Cmv:
         return False
 
     def lic1(self):
+
+        if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
+            return False
+        
         for i in range(self.num_points-2):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]
@@ -191,6 +165,12 @@ class Cmv:
         Conditions on parameters: 
         - (0 <= AREA1)
         """
+        if (type(self.area1) is not float) and (type(self.area1) is not int) or (self.area1 < 0):
+            return False
+        
+        if (self.num_points < 3):
+            return False
+
         for i in range(self.num_points - 2):
             delta = np.linalg.det(np.c_[self.points[i:(i+3)], np.ones((3, 1))])
             A = 0.5*np.abs(delta)
@@ -276,7 +256,7 @@ class Cmv:
 
         if ((self.num_points >= 3) and (self.k_pts >= 1)):
             for i in range(self.num_points - (self.k_pts + 1)):
-                
+
                 p1 = self.points[i]
                 p2 = self.points[i + self.k_pts + 1]
                 distance = math.dist(p1,p2)
@@ -299,7 +279,12 @@ class Cmv:
         - (1 <= B_PTS)
         - (A_PTS + B_PTS <= (NUMPOINTS - 3))
         """
-
+        if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
+            return False
+        if (type(self.a_pts) is not int) or (type(self.b_pts) is not int) or (self.a_pts < 1) or (self.b_pts < 1):
+            return False 
+        if (self.a_pts + self.b_pts > (self.num_points - 3)):
+            return False
         if self.num_points < 5:
             return False
         
@@ -332,17 +317,17 @@ class Cmv:
     def lic9(self):
         """
         There exists at least one set of three data points separated 
-        by exactly C PTS and D PTS consecutive intervening points, 
+        by exactly C_PTS and D_PTS consecutive intervening points, 
         respectively, that form an angle such that:
 
-        angle < (PI − EPSILON) or angle > (PI + EPSILON)
+        angle < (PI - EPSILON) or angle > (PI + EPSILON)
 
         The second point of the set of three points is always the vertex of the angle.
         If either of the other points coincide with the vertex, the angle is disregarded.
 
         Conditions on parameters: 
-        1≤C PTS,1≤D PTS
-        C PTS+D PTS ≤ NUMPOINTS−3
+        1 <= C_PTS, 1 <= D_PTS
+        C_PTS + D_PTS <= NUMPOINTS - 3
         """
         lic_passed = False
 
@@ -372,8 +357,28 @@ class Cmv:
     def lic10(self):
         pass
 
+    
     def lic11(self):
-        pass
+        """
+        There exists at least one set of two data points, 
+        (X[i],Y[i])and (X[j],Y[j]), 
+        separated by exactly G PTS consecutive intervening points,
+        such that X[j] - X[i] < 0. (where i < j )
+
+        Conditions on parameters: 
+        1 ≤ G PTS ≤ NUMPOINTS−2
+        """
+        lic_passed = False
+        j = self.g_pts + 1
+
+        if(self.num_points >=3 ):
+            for i in range(self.num_points - j):
+                x_1 = self.points[i][0]
+                x_2 = self.points[i+j][0]
+                
+                if(x_2 - x_1 < 0):
+                    lic_passed = True
+        return lic_passed
 
     def lic12(self):
         pass
@@ -399,6 +404,14 @@ class Cmv:
         - (A_PTS + B_PTS <= (NUMPOINTS - 3))
         """
 
+        if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
+            return False
+        if ((type(self.radius2) is not float) and (type(self.radius2) is not int)) or (self.radius2 < 0):
+            return False
+        if (type(self.a_pts) is not int) or (type(self.b_pts) is not int) or (self.a_pts < 1 or self.b_pts < 1):
+            return False 
+        if (self.a_pts + self.b_pts > (self.num_points - 3)):
+            return False
         if self.num_points < 5:
             return False
         

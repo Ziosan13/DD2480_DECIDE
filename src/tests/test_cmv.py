@@ -464,19 +464,17 @@ class test_cmv(unittest.TestCase):
         # Input:
         # - AREA1 is negative
         # - points form a 3-4-5 triangle of area equal to 6.0
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['AREA1'] = -1.0
-            Cmv(params, points, num_points).lic3()
+        # Expected behavior: LIC 3 is False.
+        params['AREA1'] = -1.0
+        Cmv(params, points, num_points).lic3()
 
         # Test Case 14:
         # Input:
         # - AREA1 is not a number
         # - points form a 3-4-5 triangle of area equal to 6.0
-        # Expected behavior: raises TypeError.
-        with self.assertRaises(TypeError):
-            params['AREA1'] = "hi"
-            Cmv(params, points, num_points).lic3()
+        # Expected behavior: LIC 3 is False.
+        params['AREA1'] = "hi"
+        Cmv(params, points, num_points).lic3()
 
     def test_lic_4(self) -> None:
         params = self.parameters.copy()
@@ -978,12 +976,11 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = -1
-            params['B_PTS'] = 1
-            params['RADIUS1'] = 0.0
-            Cmv(params, points, num_points).lic8()
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = -1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic8())
 
         # Test Case 11:
         # Input:
@@ -991,12 +988,11 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = -1
-            params['RADIUS1'] = 0.0
-            Cmv(params, points, num_points).lic8()
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = -1
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic8())
 
         # Test Case 12:
         # Input:
@@ -1004,12 +1000,11 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 1
-            params['RADIUS1'] = -1.0
-            Cmv(params, points, num_points).lic8()
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = -1.0
+        self.assertFalse(Cmv(params, points, num_points).lic8())
 
         # Test Case 13:
         # Input:
@@ -1017,12 +1012,11 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises TypeError.
-        with self.assertRaises(TypeError):
-            params['A_PTS'] = 1.0
-            params['B_PTS'] = 1
-            params['RADIUS1'] = 0.0
-            Cmv(params, points, num_points).lic8()
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 1.0
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic8())
 
         # Test Case 14:
         # Input:
@@ -1030,12 +1024,11 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises TypeError.
-        with self.assertRaises(TypeError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 1.0
-            params['RADIUS1'] = 0.0
-            Cmv(params, points, num_points).lic8()
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1.0
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic8())
 
         # Test Case 15:
         # Input:
@@ -1043,12 +1036,11 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises TypeError.
-        with self.assertRaises(TypeError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 1
-            params['RADIUS1'] = "hi"
-            Cmv(params, points, num_points).lic8()
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = "hi"
+        self.assertFalse(Cmv(params, points, num_points).lic8())
 
         # Test Case 16:
         # Input:
@@ -1056,12 +1048,11 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 0
-            params['B_PTS'] = 1
-            params['RADIUS1'] = 0.0
-            Cmv(params, points, num_points).lic8()
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 0
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic8())
 
         # Test Case 17:
         # Input:
@@ -1069,12 +1060,11 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 0
-            params['RADIUS1'] = 0.0
-            Cmv(params, points, num_points).lic8()
+        # Expected behavior: LIC 8 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 0
+        params['RADIUS1'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic8())
 
     #Tests if LIC9 returns true when angle falls within range < (PI - epsilon) or > (pI + epsilon)
     def test_lic9_true(self):
@@ -1313,13 +1303,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = -1
-            params['B_PTS'] = 1
-            params['RADIUS1'] = 0.0
-            params['RADIUS2'] = 0.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = -1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        params['RADIUS2'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 11:
         # Input:
@@ -1327,13 +1316,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = -1
-            params['RADIUS1'] = 0.0
-            params['RADIUS2'] = 0.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = -1
+        params['RADIUS1'] = 0.0
+        params['RADIUS2'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 12:
         # Input:
@@ -1341,13 +1329,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 1
-            params['RADIUS1'] = -1.0
-            params['RADIUS2'] = 0.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = -1.0
+        params['RADIUS2'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 13:
         # Input:
@@ -1355,13 +1342,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises TypeError.
-        with self.assertRaises(TypeError):
-            params['A_PTS'] = 1.0
-            params['B_PTS'] = 1
-            params['RADIUS1'] = 0.0
-            params['RADIUS2'] = 0.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 1.0
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        params['RADIUS2'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 14:
         # Input:
@@ -1369,13 +1355,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises TypeError.
-        with self.assertRaises(TypeError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 1.0
-            params['RADIUS1'] = 0.0
-            params['RADIUS2'] = 0.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1.0
+        params['RADIUS1'] = 0.0
+        params['RADIUS2'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 15:
         # Input:
@@ -1383,13 +1368,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises TypeError.
-        with self.assertRaises(TypeError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 1
-            params['RADIUS1'] = "hi"
-            params['RADIUS2'] = 0.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = "hi"
+        params['RADIUS2'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 16:
         # Input:
@@ -1397,13 +1381,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 0
-            params['B_PTS'] = 1
-            params['RADIUS1'] = 0.0
-            params['RADIUS2'] = 0.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 0
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        params['RADIUS2'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 17:
         # Input:
@@ -1411,13 +1394,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 0
-            params['RADIUS1'] = 0.0
-            params['RADIUS2'] = 0.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 0
+        params['RADIUS1'] = 0.0
+        params['RADIUS2'] = 0.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 18:
         # Input:
@@ -1425,13 +1407,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises ValueError.
-        with self.assertRaises(ValueError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 1
-            params['RADIUS1'] = 0.0
-            params['RADIUS2'] = -1.0
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        params['RADIUS2'] = -1.0
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
         # Test Case 19:
         # Input:
@@ -1439,13 +1420,12 @@ class test_cmv(unittest.TestCase):
         # - points at indices 2, 6, 11
         #   form a 3-4-5 triangle that is contained
         #   in a circle of radius 2.5
-        # Expected behavior: raises TypeError.
-        with self.assertRaises(TypeError):
-            params['A_PTS'] = 1
-            params['B_PTS'] = 1
-            params['RADIUS1'] = 0.0
-            params['RADIUS2'] = "hi"
-            Cmv(params, points, num_points).lic13()
+        # Expected behavior: LIC 13 is False.
+        params['A_PTS'] = 1
+        params['B_PTS'] = 1
+        params['RADIUS1'] = 0.0
+        params['RADIUS2'] = "hi"
+        self.assertFalse(Cmv(params, points, num_points).lic13())
 
     def test_lic7_k_pts_less_than_1(self):
     # Tests that num_points has to be more than 3 elements
@@ -1523,6 +1503,49 @@ class test_cmv(unittest.TestCase):
         print(str(cmv_changed.k_pts) + " kpts")
         result = cmv_changed.lic7()
         self.assertTrue(result)
+
+    # Tests that there exists at least one set of two data points,
+    #(X[i],Y[i]) and (X[j],Y[j]), 
+    # separated by exactly G PTS consecutive intervening points, 
+    #such that X[j] - X[i] < 0. (where i < j )
+        
+    #For example test_points[0] and test_points[2]
+    def test_lic11_true(self):
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [6.0, 5.0]
+                    ])
+
+        cmv_changed = Cmv(self.parameters, test_points, len(test_points))
+        result = cmv_changed.lic11()
+        self.assertTrue(result)
+
+    #Tests that LIC is not true when X[j] - X[i] >= 0
+    def test_lic11_false(self):  
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [3.0, 2.0],
+                        [4.0, 2.0],
+                        [5.0, 2.0],
+                        [6.0, 2.0],
+                        [7.0, 2.0],
+                        [8.0, 5.0]
+                    ])
+
+        cmv_changed = Cmv(self.parameters, test_points, len(test_points))
+        result = cmv_changed.lic11()
+        self.assertFalse(result)
 
 if __name__ == '__main__':
     unittest.main()
