@@ -131,5 +131,6 @@ class Decide:
         # compute FUV
 
         # compute LAUNCH
+        self.launch = np.all(self.fuv)
 
         print("YES" if self.launch else "NO")
