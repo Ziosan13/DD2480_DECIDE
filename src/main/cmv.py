@@ -372,9 +372,6 @@ class Cmv:
                 if area>self.area1:
                     return True
             return False
-                
-
-
     
     def lic11(self):
         """
