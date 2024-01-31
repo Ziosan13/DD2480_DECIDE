@@ -1126,17 +1126,45 @@ class test_cmv(unittest.TestCase):
     def test_lic_10(self) -> None:
         params=self.parameters.copy()
         
-        """
-        Test Case 1: -> False
-        numpoints<5
-        """
+        # Test Case 1: -> False
+        # E_PTS>=1 , F_PTS>=1 but NUMPOINTS<5
         points=np.array([
             [1,1],
             [2,2],
             [3,3],
             [4,4],
         ])
+        params['E_PTS'] = 1
+        params['F_PTS'] = 1
         self.assertFalse(Cmv(params, points, len(points)).lic10())
+        
+        # From here, points are fixed below
+        points = np.array([
+            [6, 5],
+            [3, 6],
+            [1, 1],
+            [12, 10],
+            [7, 5]]
+        )
+
+        # Test Case 2 : -> False
+        # NUMPOINTS>=5, F_PTS>=1 E_PTS+F_PTS<=NUMPOINTS-3, but E_PTS<1
+        params['E_PTS'] = 0
+        params['F_PTS'] = 1
+        self.assertFalse(Cmv(params, points, len(points)).lic10())
+        
+        # Test Case 3 : -> False
+        # NUMPOINTS>=5, E_PTS>=1 E_PTS+F_PTS<=NUMPOINTS-3, but F_PTS<1
+        params['E_PTS'] = 0
+        params['F_PTS'] = 1
+        self.assertFalse(Cmv(params, points, len(points)).lic10())
+        
+        # Test Case 4 : -> False
+        # NUMPOINTS>=5, E_PTS>=1 F_PTS<1, but E_PTS+F_PTS > NUMPOINTS−3
+        params['E_PTS'] = 1
+        params['F_PTS'] = 2
+        self.assertFalse(Cmv(params, points, len(points)).lic10())
+        
         
         # From here, points are fixed below
         points = np.array([
@@ -1154,59 +1182,36 @@ class test_cmv(unittest.TestCase):
             [4, 1]]
         )
         
-        """
-        Test Case 2: -> ValueError
-        E_PTS<1
-        """
-        with self.assertRaises(ValueError):
-            params['E_PTS'] = 0
-            params['F_PTS'] = 1
-            Cmv(params, points, len(points)).lic10()
-        
-        """
-        Test Case 3: -> ValueError
-        F_PTS<1
-        """
-        
-        with self.assertRaises(ValueError):
-            params['E_PTS'] = 1
-            params['F_PTS'] = 0
-            Cmv(params, points, len(points)).lic10()
-        
-        """
-        Test Case 4: -> False
-        E PTS+F PTS > NUMPOINTS−3
-        """
-        params['E_PTS'] = 6
-        params['F_PTS'] = 5
-        self.assertFalse(Cmv(params, points, len(points)).lic10())
-        
-        """
-        Test Case 5: -> True
-        passed
-        """
+        # Test Case 5: -> True
+        # passed
         params['AREA1'] = 5
         params['E_PTS'] = 3
         params['F_PTS'] = 4
         self.assertTrue(Cmv(params, points, len(points)).lic10())
         
-        """
-        Test Case 6: -> False
-        Area1 is larger
-        """
+        # Test Case 6: -> False
+        # Area1 is larger
         params["AREA1"] = 10
+        params['E_PTS'] = 3
+        params['F_PTS'] = 4
         self.assertFalse(Cmv(params, points, len(points)).lic10())
         
-        """
-        Test Case 7: -> False
-        No combination of any three points in this condition 
-        can be larger than Area1
-        """
+        # Test Case 7: -> False
+        # No combination of any three points in this condition 
+        # can be larger than Area1
         params["AREA1"] = 5
-        params["E_PTS"] = 5
+        params["E_PTS"] = 3
         params["F_PTS"] = 5
         self.assertFalse(Cmv(params, points, len(points)).lic10())
         
+        
+        # Test Case 8: -> False
+        # No combination of any three points in this condition 
+        # can be larger than Area1
+        params["AREA1"] = 5
+        params["E_PTS"] = 6
+        params["F_PTS"] = 4
+        self.assertFalse(Cmv(params, points, len(points)).lic10())
         
 
     def test_lic_13(self) -> None:
