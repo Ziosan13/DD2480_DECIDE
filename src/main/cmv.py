@@ -1,6 +1,7 @@
 import numpy as np
 from functools import reduce
 from math import isclose
+import math
 
 class Cmv:
     """
@@ -357,7 +358,32 @@ class Cmv:
         pass
 
     def lic12(self):
-        pass
+        """
+        There exists at least one set of two data points, separated by exactly K PTS consecutive 
+        intervening points, which are a distance greater than the length, LENGTH1, apart. 
+        In addition, there exists at least one set of two data points (which can be the same 
+        or different from the two data points just mentioned), separated by exactly K PTS 
+        consecutive intervening points, that are a distance less than the length, LENGTH2, apart. 
+        Both parts must be true for the LIC to be true. The condition is not met 
+        when NUMPOINTS < 3, 0 ≤ LENGTH2
+        """
+        
+        flag_1, flag_2= False, False
+        
+        if (self.num_points < 3) or self.length2 <0:
+            return False
+
+        for i in range(self.num_points - (self.k_pts + 1)):
+            p1 = self.points[i]
+            p2 = self.points[i + self.k_pts + 1]
+            distance = math.dist(p1,p2)
+            if (distance > self.length1):
+                flag_1=True
+            if (distance < self.length2):
+                flag_2=True
+
+        return flag_1 and flag_2
+        
 
     def lic13(self):
         """
