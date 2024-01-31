@@ -1138,6 +1138,12 @@ class test_cmv(unittest.TestCase):
         params['F_PTS'] = 1
         self.assertFalse(Cmv(params, points, len(points)).lic10())
         
+        # Test Case 2: -> False
+        # E_PTS<1 , F_PTS<1 but NUMPOINTS<5
+        params['E_PTS'] = 0
+        params['F_PTS'] = 0
+        self.assertFalse(Cmv(params, points, len(points)).lic10())
+        
         # From here, points are fixed below
         points = np.array([
             [6, 5],
@@ -1147,19 +1153,19 @@ class test_cmv(unittest.TestCase):
             [7, 5]]
         )
 
-        # Test Case 2 : -> False
+        # Test Case 3 : -> False
         # NUMPOINTS>=5, F_PTS>=1 E_PTS+F_PTS<=NUMPOINTS-3, but E_PTS<1
         params['E_PTS'] = 0
         params['F_PTS'] = 1
         self.assertFalse(Cmv(params, points, len(points)).lic10())
         
-        # Test Case 3 : -> False
+        # Test Case 4 : -> False
         # NUMPOINTS>=5, E_PTS>=1 E_PTS+F_PTS<=NUMPOINTS-3, but F_PTS<1
         params['E_PTS'] = 0
         params['F_PTS'] = 1
         self.assertFalse(Cmv(params, points, len(points)).lic10())
         
-        # Test Case 4 : -> False
+        # Test Case 5 : -> False
         # NUMPOINTS>=5, E_PTS>=1 F_PTS<1, but E_PTS+F_PTS > NUMPOINTS−3
         params['E_PTS'] = 1
         params['F_PTS'] = 2
@@ -1182,21 +1188,21 @@ class test_cmv(unittest.TestCase):
             [4, 1]]
         )
         
-        # Test Case 5: -> True
+        # Test Case 6: -> True
         # passed
         params['AREA1'] = 5
         params['E_PTS'] = 3
         params['F_PTS'] = 4
         self.assertTrue(Cmv(params, points, len(points)).lic10())
         
-        # Test Case 6: -> False
+        # Test Case 7: -> False
         # Area1 is larger
         params["AREA1"] = 10
         params['E_PTS'] = 3
         params['F_PTS'] = 4
         self.assertFalse(Cmv(params, points, len(points)).lic10())
         
-        # Test Case 7: -> False
+        # Test Case 8: -> False
         # No combination of any three points in this condition 
         # can be larger than Area1
         params["AREA1"] = 5
@@ -1205,7 +1211,7 @@ class test_cmv(unittest.TestCase):
         self.assertFalse(Cmv(params, points, len(points)).lic10())
         
         
-        # Test Case 8: -> False
+        # Test Case 9: -> False
         # No combination of any three points in this condition 
         # can be larger than Area1
         params["AREA1"] = 5
