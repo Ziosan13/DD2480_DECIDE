@@ -1,6 +1,8 @@
 import numpy as np
 from functools import reduce
 from math import isclose
+import math
+
 
 class Cmv:
     """
@@ -35,7 +37,6 @@ class Cmv:
         self.num_points = num_points
 
         self.cmv = np.zeros(15, dtype="bool_")
-        self.check_parameters()
         self.cmv_calc()
 
     def cmv_calc(self):
@@ -55,38 +56,6 @@ class Cmv:
         self.cmv[13] = self.lic13()
         self.cmv[14] = self.lic14()
         return self.cmv
-    
-    def check_parameters(self):
-        """
-        Checks that parameters are well-formed.
-        Raises exceptions otherwise.
-        """
-        if (type(self.area1) is not float) and (type(self.area1) is not int):
-            raise TypeError(
-                'AREA1 parameter in parameters input must be a number.')
-        if (self.area1 < 0):
-            raise ValueError(
-                'AREA1 parameter in parameters input must be positive.')
-        if (type(self.radius1) is not float) and (type(self.radius1) is not int):
-            raise TypeError(
-                'RADIUS1 parameter in parameters input must be a number.')
-        if (self.radius1 < 0):
-            raise ValueError(
-                'RADIUS1 parameter in parameters input must be positive.')
-        if (type(self.radius2) is not float) and (type(self.radius1) is not int):
-            raise TypeError(
-                'RADIUS2 parameter in parameters input must be a number.')
-        if (self.radius2 < 0):
-            raise ValueError(
-                'RADIUS2 parameter in parameters input must be positive.')
-        if (type(self.a_pts) is not int) or (type(self.b_pts) is not int):
-            raise TypeError('A_PTS and B_PTS parameters must be integers.')
-        if (self.a_pts < 1 or self.b_pts < 1):
-            raise ValueError('A_PTS and B_PTS must be greater than 1.')
-        if (self.e_pts < 1 or self.f_pts < 1):
-            raise ValueError('E_PTS and F_PTS must be greater than 1.')
-        
-        # we can add more checks as we make the LICs
 
     def lic0(self):
         for i in range(len(self.points)-1):
@@ -103,6 +72,10 @@ class Cmv:
         return False
 
     def lic1(self):
+
+        if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
+            return False
+        
         for i in range(self.num_points-2):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]
@@ -114,41 +87,49 @@ class Cmv:
             AB = [x_i_plus_one-x_i,y_i_plus_one-y_i]
             BC = [x_i_plus_two-x_i_plus_one,y_i_plus_two-y_i_plus_one]
             CA = [x_i-x_i_plus_two,y_i-y_i_plus_two]
+
+            if not (AB == [0,0] or BC == [0,0] or CA == [0,0]): ## Checks if any of the two points are the same
+                
+                # Two cases: 
+                # Case 1: Longest side is diameter
+
+                # Checks which side is the longest, and which points span the longest side
+                if np.linalg.norm(AB) > np.linalg.norm(BC) and np.linalg.norm(AB) > np.linalg.norm(CA):
+                    longest_side = AB
+                    other_point = [x_i_plus_two,y_i_plus_two]
+                    midpoint = [x_i,y_i]+[1/2*AB[0],1/2*AB[1]]
+
+                elif np.linalg.norm(BC) > np.linalg.norm(AB) and np.linalg.norm(BC) > np.linalg.norm(CA):
+                    longest_side = BC
+                    other_point = [x_i,y_i]
+                    midpoint = [x_i_plus_one,y_i_plus_one]+[1/2*BC[0],1/2*BC[1]]
+
+
+                elif np.linalg.norm(CA) > np.linalg.norm(BC) and np.linalg.norm(CA) > np.linalg.norm(AB):
+                    longest_side = CA
+                    other_point = [x_i_plus_one,y_i_plus_one]
+                    midpoint = [x_i_plus_two,y_i_plus_two]+[[1/2*CA[0],1/2*CA[1]]]
+
+                # Checks if the point not on the diameter is in or on the circle
+                if ((other_point[0]-midpoint[0])**2  + (other_point[1]-midpoint[1])**2 <= np.linalg.norm(longest_side)**2):
+                    r = np.linalg.norm(longest_side)/2 # computes radius as half of the longest side in triangel
+
+                # Case 2: All points are on circle, radius is given by the triangel spanning the circle
+                else:
+                    area = 1/2 * np.linalg.norm(np.cross(AB,BC)+np.cross(BC,CA)+np.cross(CA,AB))
+                    r = (np.linalg.norm(AB)*np.linalg.norm(BC)*np.linalg.norm(CA))/(4*area)
+              
+                if r > self.radius1:
+                    return True
             
-            # Two cases: 
+            elif not (AB == [0,0] and BC == [0,0] and CA == [0,0]): #two points are the same
 
-            # Case 1: Longest side is diameter
-
-            # Checks which side is the longest, and which points span the longest side
-            if np.linalg.norm(AB) > np.linalg.norm(BC) and np.linalg.norm(AB) > np.linalg.norm(CA):
-                longest_side = AB
-                other_point = [x_i_plus_two,y_i_plus_two]
-                midpoint = [x_i,y_i]+[1/2*AB[0],1/2*AB[1]]
-
-            elif np.linalg.norm(BC) > np.linalg.norm(AB) and np.linalg.norm(BC) > np.linalg.norm(CA):
-                longest_side = BC
-                other_point = [x_i,y_i]
-                midpoint = [x_i_plus_one,y_i_plus_one]+[1/2*BC[0],1/2*BC[1]]
-
-
-            elif np.linalg.norm(CA) > np.linalg.norm(BC) and np.linalg.norm(CA) > np.linalg.norm(AB):
-                longest_side = CA
-                other_point = [x_i_plus_one,y_i_plus_one]
-                midpoint = [x_i_plus_two,y_i_plus_two]+[[1/2*CA[0],1/2*CA[1]]]
-
-            # Checks if the point not on the diameter is in the circle
-            if ((other_point[0]-midpoint[0])**2  + (other_point[1]-midpoint[1])**2 < np.linalg.norm(longest_side)**2):
-                r = np.linalg.norm(longest_side)/2 # computes radius as half of the longest side in triangel
-
-            # Case 2: All points are on circle, radius is given by the triangel spanning the circle
-            else:
-                area = 1/2 * np.linalg.norm(np.cross(AB,BC)+np.cross(BC,CA)+np.cross(CA,AB))
-                r = (np.linalg.norm(AB)*np.linalg.norm(BC)*np.linalg.norm(CA))/(4*area)
-
-            if r > self.radius1:
-                return True
-
-        return False
+                r = max(np.linalg.norm(AB),np.linalg.norm(BC),np.linalg.norm(CA))/2
+               
+                if r > self.radius1:
+                    return True
+            
+            return False
 
     def lic2(self):
         for i in range(self.num_points-2):
@@ -162,13 +143,13 @@ class Cmv:
             BA = [x_i-x_i_plus_one,y_i-y_i_plus_one]
             BC = [x_i_plus_two-x_i_plus_one,y_i_plus_two-y_i_plus_one]
 
-            angle = np.arccos(np.dot(BA,BC)/(np.linalg.norm(BA)*(np.linalg.norm(BC))))
-
-            if angle < np.pi - self.epsilon:
-                return True
-            
-            elif angle > np.pi + self.epsilon:
-                return True
+            if not (BC==[0,0] or BA == [0,0]):
+                angle = np.arccos(np.around(np.dot(BA,BC)/(np.linalg.norm(BA)*(np.linalg.norm(BC))), 6))
+                if angle < np.pi - self.epsilon:
+                    return True
+                
+                elif angle > np.pi + self.epsilon:
+                    return True
         
         return False
 
@@ -184,6 +165,12 @@ class Cmv:
         Conditions on parameters: 
         - (0 <= AREA1)
         """
+        if (type(self.area1) is not float) and (type(self.area1) is not int) or (self.area1 < 0):
+            return False
+        
+        if (self.num_points < 3):
+            return False
+
         for i in range(self.num_points - 2):
             delta = np.linalg.det(np.c_[self.points[i:(i+3)], np.ones((3, 1))])
             A = 0.5*np.abs(delta)
@@ -259,7 +246,24 @@ class Cmv:
 
 
     def lic7(self):
-        pass
+        """
+        Calculates the distance of two data points separated by exactly 
+        K PTS consecutive intervening points. If the distance is greater
+        than length1 the lic is set to True.
+        """
+        
+        lic_status = False
+
+        if ((self.num_points >= 3) and (self.k_pts >= 1)):
+            for i in range(self.num_points - (self.k_pts + 1)):
+
+                p1 = self.points[i]
+                p2 = self.points[i + self.k_pts + 1]
+                distance = math.dist(p1,p2)
+                if (distance > self.length1):
+                    lic_status = True
+
+        return lic_status
 
     def lic8(self):
         """
@@ -275,7 +279,12 @@ class Cmv:
         - (1 <= B_PTS)
         - (A_PTS + B_PTS <= (NUMPOINTS - 3))
         """
-
+        if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
+            return False
+        if (type(self.a_pts) is not int) or (type(self.b_pts) is not int) or (self.a_pts < 1) or (self.b_pts < 1):
+            return False 
+        if (self.a_pts + self.b_pts > (self.num_points - 3)):
+            return False
         if self.num_points < 5:
             return False
         
@@ -308,17 +317,17 @@ class Cmv:
     def lic9(self):
         """
         There exists at least one set of three data points separated 
-        by exactly C PTS and D PTS consecutive intervening points, 
+        by exactly C_PTS and D_PTS consecutive intervening points, 
         respectively, that form an angle such that:
 
-        angle < (PI − EPSILON) or angle > (PI + EPSILON)
+        angle < (PI - EPSILON) or angle > (PI + EPSILON)
 
         The second point of the set of three points is always the vertex of the angle.
         If either of the other points coincide with the vertex, the angle is disregarded.
 
         Conditions on parameters: 
-        1≤C PTS,1≤D PTS
-        C PTS+D PTS ≤ NUMPOINTS−3
+        1 <= C_PTS, 1 <= D_PTS
+        C_PTS + D_PTS <= NUMPOINTS - 3
         """
         lic_passed = False
 
@@ -366,8 +375,28 @@ class Cmv:
                 
 
 
+    
     def lic11(self):
-        pass
+        """
+        There exists at least one set of two data points, 
+        (X[i],Y[i])and (X[j],Y[j]), 
+        separated by exactly G PTS consecutive intervening points,
+        such that X[j] - X[i] < 0. (where i < j )
+
+        Conditions on parameters: 
+        1 ≤ G PTS ≤ NUMPOINTS−2
+        """
+        lic_passed = False
+        j = self.g_pts + 1
+
+        if(self.num_points >=3 ):
+            for i in range(self.num_points - j):
+                x_1 = self.points[i][0]
+                x_2 = self.points[i+j][0]
+                
+                if(x_2 - x_1 < 0):
+                    lic_passed = True
+        return lic_passed
 
     def lic12(self):
         pass
@@ -393,6 +422,14 @@ class Cmv:
         - (A_PTS + B_PTS <= (NUMPOINTS - 3))
         """
 
+        if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
+            return False
+        if ((type(self.radius2) is not float) and (type(self.radius2) is not int)) or (self.radius2 < 0):
+            return False
+        if (type(self.a_pts) is not int) or (type(self.b_pts) is not int) or (self.a_pts < 1 or self.b_pts < 1):
+            return False 
+        if (self.a_pts + self.b_pts > (self.num_points - 3)):
+            return False
         if self.num_points < 5:
             return False
         
