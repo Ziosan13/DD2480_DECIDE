@@ -276,10 +276,7 @@ class Cmv:
 
         if ((self.num_points >= 3) and (self.k_pts >= 1)):
             for i in range(self.num_points - (self.k_pts + 1)):
-                print(self.num_points)
-                print(self.k_pts + 1)
-                print(self.num_points - (self.k_pts + 1))
-                print(i)
+                
                 p1 = self.points[i]
                 p2 = self.points[i + self.k_pts + 1]
                 distance = math.dist(p1,p2)
