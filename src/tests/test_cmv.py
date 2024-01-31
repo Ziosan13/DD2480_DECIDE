@@ -1524,5 +1524,48 @@ class test_cmv(unittest.TestCase):
         result = cmv_changed.lic7()
         self.assertTrue(result)
 
+    # Tests that there exists at least one set of two data points,
+    #(X[i],Y[i]) and (X[j],Y[j]), 
+    # separated by exactly G PTS consecutive intervening points, 
+    #such that X[j] - X[i] < 0. (where i < j )
+        
+    #For example test_points[0] and test_points[2]
+    def test_lic11_true(self):
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [6.0, 5.0]
+                    ])
+
+        cmv_changed = Cmv(self.parameters, test_points, len(test_points))
+        result = cmv_changed.lic11()
+        self.assertTrue(result)
+
+    #Tests that LIC is not true when X[j] - X[i] >= 0
+    def test_lic11_false(self):  
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [3.0, 2.0],
+                        [4.0, 2.0],
+                        [5.0, 2.0],
+                        [6.0, 2.0],
+                        [7.0, 2.0],
+                        [8.0, 5.0]
+                    ])
+
+        cmv_changed = Cmv(self.parameters, test_points, len(test_points))
+        result = cmv_changed.lic11()
+        self.assertFalse(result)
+
 if __name__ == '__main__':
     unittest.main()
