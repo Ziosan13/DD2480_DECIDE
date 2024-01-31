@@ -1,6 +1,8 @@
 import numpy as np
 from functools import reduce
 from math import isclose
+import math
+
 
 class Cmv:
     """
@@ -264,7 +266,24 @@ class Cmv:
 
 
     def lic7(self):
-        pass
+        """
+        Calculates the distance of two data points separated by exactly 
+        K PTS consecutive intervening points. If the distance is greater
+        than length1 the lic is set to True.
+        """
+        
+        lic_status = False
+
+        if ((self.num_points >= 3) and (self.k_pts >= 1)):
+            for i in range(self.num_points - (self.k_pts + 1)):
+                
+                p1 = self.points[i]
+                p2 = self.points[i + self.k_pts + 1]
+                distance = math.dist(p1,p2)
+                if (distance > self.length1):
+                    lic_status = True
+
+        return lic_status
 
     def lic8(self):
         """
