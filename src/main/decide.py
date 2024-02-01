@@ -176,9 +176,8 @@ class Decide:
         None
         """
 
-        # compute LICs
-
         # compute PUM
+        self.pum = self.calc_pum(self.lcm, self.cmv.cmv)
 
         # compute FUV
         self.compute_fuv()
