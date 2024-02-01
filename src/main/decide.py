@@ -109,6 +109,39 @@ class Decide:
         
         self.lcm = lcm
 
+    def load_puv_from_file(self, file_path : str) -> list:
+        """
+        Generates a PUV vector from a txt file 
+        and assigns it to the current instance.
+        The txt file must contain 15 values
+        among 0 (for FALSE) and 1 (for TRUE).
+
+        Parameters
+        ----------
+        file_path: str
+            path to the txt file
+        """
+        puv = []
+        with open(file_path, 'r') as file:
+            line = file.readline()
+
+        for char in line:
+            if (char != '\n'):
+                match int(char):
+                    case 0:
+                        puv.append(False)
+                    case 1:
+                        puv.append(True)
+                    case _:
+                        raise ValueError("Wrong value in provided file.")
+                        
+        puv = np.array(puv)
+        if (puv.shape != (15,)):
+            raise ValueError('Wrong shape for PUV vector. Check the provided file.')
+        
+        self.puv = puv
+        return puv
+
     def compute_fuv(self):
         for i in range(15):
             if self.puv[i] == False: # If puv[i] is false, fuv[i] is always true
