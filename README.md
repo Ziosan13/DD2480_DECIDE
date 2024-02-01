@@ -3,7 +3,9 @@
 The DECIDE program generates a boolean signal which determines whether an interceptor should be launched or not.
 
 ## How it works
-It determines which combination of the several possible Launch Interceptor Conditions (LIC’s) are relevant to the immediate situation. The interceptor launch button is normally considered locked; only if all relevant combinations of launch conditions are met will the launch- unlock signal be issued.
+It determines which combination of the several possible Launch Interceptor Conditions (LIC’s) are relevant to the immediate situation. In [src/main/cmv.py](src/main/cmv.py), you can find the details of each process individually. 
+
+The interceptor launch button is normally considered locked; only if all relevant combinations of launch conditions are met will the launch- unlock signal be issued.
 
 It determines whether each of fifteen LIC’s is true for an input set of up to 100 planar data points representing radar echoes. The fifteen elements of a Conditions Met Vector (CMV) will be assigned boolean values true or false; each element of the CMV corresponds to one LIC’s condition.
 
@@ -15,9 +17,9 @@ The DECIDE program uses 5 inputs:
 - **PARAMETERS** : a dictionary holding various parameters used by the program 
     - see matrix of parameters below
 - **LCM** : a 15x15 logical connector matrix which determines boolean relationships between the various conditions needed to be fulfilled 
-    - it contains values among "NOTUSED", "ANDD" and "ORR"
+    - It contains values among "NOTUSED", "ANDD" and "ORR"
 - **PUV** : a preliminary unlocking vector 
-    - it contains boolean values determining if some conditions should hold back the launch of the interceptor
+    - It contains boolean values determining if some conditions should hold back the launch of the interceptor
 
 Using these, a boolean signal is generated and "YES" or "NO" is printed to the standard output based on the decision.
 
@@ -48,36 +50,37 @@ The parameters in the PARAMETERS dictionary are as follow:
 
 ## Getting Started
 
-### Dependencies
+### Requirements
+- Python == 3.11
 
-To install dependencies for the program, run (from the project folder):
+### Installing
+Quick setup
 ```
+git clone https://github.com/Ziosan13/DD2480_DECIDE.git
 pip install -r requirements.txt
 ```
 
-### Documentation
-To generate PDF documentation, run from the docs/ folder (after installing dependencies):
+Alternatively, you can install the library in a virtual environment as follows:
 ```
-make latexpdf
-```
-or (for Windows)
-```
-.\make.bat latexpdf
-```
-To generate html files, replace latexpdf with html in the last commands.
-Generated files are then available in docs/_build/ folder.
+python -m venv venv # Make a virtual environment
+source venv/bin/activate # Enter the virtual environment
 
-### Installing
-
-To install the program, just clone the GitHub repository.
+pip install -r requirements.txt
+```
 
 ### Executing program
+Below, you can test DECIDE program with some test cases
+```
+cd src
+python -m tests.test_decide
+```
 
-* How to run the program
-* Step-by-step bullets
+Also, you can test with GUI.
 ```
-code blocks for commands
+cd src
+python app.py
 ```
+![picture](GUI.png)
 
 ## Authors
 
