@@ -1526,18 +1526,18 @@ class test_cmv(unittest.TestCase):
 
     def test_lic7_k_pts_less_than_1(self):
     # Tests that num_points has to be more than 3 elements
-        test_points = [
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (2.0, 2.0),
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (2.0, 2.0),
-                        (2.0, 2.0),
-                        (1.0, 2.0),
-                        (6.0, 5.0)
-                    ]
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [6.0, 5.0]
+                    ])
 
         parameters_changed = copy.deepcopy(self.parameters)
         parameters_changed["K_PTS"] = 0.5
@@ -1548,10 +1548,10 @@ class test_cmv(unittest.TestCase):
 
     def test_lic7_num_points_less_than_3(self):
     # Tests that num_points has to be more than 3 elements
-        test_points = [
-                        (1.0, 2.0),
-                        (6.0, 5.0)
-                    ]
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [6.0, 5.0]
+                    ])
 
         cmv_changed = Cmv(self.parameters, test_points, 2)
         result = cmv_changed.lic7()
@@ -1559,18 +1559,18 @@ class test_cmv(unittest.TestCase):
 
     def test_lic7_distance_false(self):
     # Tests that if there is no distance greater than k_pts then the lic returns false
-        test_points = [
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (2.0, 2.0),
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (2.0, 2.0),
-                        (2.0, 2.0),
-                        (1.0, 2.0),
-                        (1.0, 2.0)
-                    ]
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0]
+                    ])
         parameters_changed = copy.deepcopy(self.parameters)
         parameters_changed["K_PTS"] = 3
 
@@ -1581,18 +1581,18 @@ class test_cmv(unittest.TestCase):
 
     def test_lic7_distance_true(self):
     # Tests that if there is a distance >= lenght1 k_pts distance appart then lic is true
-        test_points = [
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (2.0, 2.0),
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (1.0, 2.0),
-                        (2.0, 2.0),
-                        (2.0, 2.0),
-                        (1.0, 2.0),
-                        (6.0, 5.0)
-                    ]
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [6.0, 5.0]
+                    ])
         parameters_changed = copy.deepcopy(self.parameters)
         parameters_changed["K_PTS"] = 2
 
