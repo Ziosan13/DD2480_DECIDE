@@ -217,5 +217,103 @@ class test_decide(unittest.TestCase):
 
         self.assertFalse((output_pum == expected_pum).all())
 
+    def test_decide(self):
+        # Test Case 1:
+        # Input:
+        # - Inputs are as in example 1 from specification
+        # Expected behavior: LAUNCH signal is False.
+        numpoints = 3
+        points = np.array([
+            [1, 1],
+            [4, 1],
+            [4, 5],
+        ])
+        parameters = {
+            "LENGTH1": 1000,
+            "RADIUS1": 0.1,
+            "EPSILON": np.pi/4,
+            "AREA1": 0.1,
+            "Q_PTS": 3,
+            "QUADS": 3,
+            "DIST": 1000,
+            "N_PTS": 3,
+            "K_PTS": 1,
+            "A_PTS": 1,
+            "B_PTS": 1,
+            "C_PTS": 1,
+            "D_PTS": 1,
+            "E_PTS": 1,
+            "F_PTS": 1,
+            "G_PTS": 4,
+            "LENGTH2": 1,
+            "RADIUS2": 1,
+            "AREA2": 1
+        }
+        decide_instance = Decide(numpoints, points, parameters, None, self.decide.puv)
+        decide_instance.load_lcm_from_file('../data/lcm_example_1.txt')
+        # Making sure LICs are as in the example from specification
+        # Only first 4 ones are used
+        self.assertFalse(decide_instance.cmv.cmv[0])
+        self.assertTrue(decide_instance.cmv.cmv[1])
+        self.assertTrue(decide_instance.cmv.cmv[2])
+        self.assertTrue(decide_instance.cmv.cmv[3])
+
+        decide_instance.decide()
+
+        self.assertFalse(decide_instance.launch)
+
+        # Test Case 2:
+        # Input:
+        # - Inputs are as in example 1 from specification
+        # - But we change LCM[0,1], LCM[0,3], LCM[1,0] and LCM[3,0] to ORR
+        # Expected behavior: LAUNCH signal is True.
+        decide_instance.lcm[0,1] = 'ORR'
+        decide_instance.lcm[1,0] = 'ORR'
+        decide_instance.lcm[0,3] = 'ORR'
+        decide_instance.lcm[3,0] = 'ORR'
+
+        decide_instance.decide()
+
+        self.assertTrue(decide_instance.launch)
+
+        # Test Case 3:
+        # - LCM and PUV are such that only LICs 4, 7, 10, 13 matter
+        # - They must all be True 
+        numpoints = 5
+        points = np.array([[-1,-1], [1,1], [-1,1], [1,-1], [2,2]])
+        parameters = {
+            "LENGTH1": 0.5,
+            "RADIUS1": 0.5,
+            "EPSILON": 0.0,
+            "AREA1": 0.1,
+            "Q_PTS": 3,
+            "QUADS": 2,
+            "DIST": 10.0,
+            "N_PTS": 3, 
+            "K_PTS": 1,
+            "A_PTS": 1,
+            "B_PTS": 1,
+            "C_PTS": 1,
+            "D_PTS": 1,
+            "E_PTS": 1,
+            "F_PTS": 1,
+            "G_PTS": 1,
+            "LENGTH2": 10.0,
+            "RADIUS2": 10.0,
+            "AREA2": 10.0
+        }
+        decide_instance = Decide(numpoints, points, parameters, None, None)
+        decide_instance.load_lcm_from_file('../data/lcm_testcase_3.txt')
+        decide_instance.load_puv_from_file('../data/puv_testcase_3.txt')
+
+        # Making sure relevant LICs i.e. 4, 7, 10, 13 are True
+        self.assertTrue(decide_instance.cmv.cmv[4])
+        self.assertTrue(decide_instance.cmv.cmv[7])
+        self.assertTrue(decide_instance.cmv.cmv[10])
+        self.assertTrue(decide_instance.cmv.cmv[13])
+
+        decide_instance.decide()
+        self.assertTrue(decide_instance.launch)
+
 if __name__ == '__main__':
     unittest.main()
