@@ -1745,6 +1745,124 @@ class test_cmv(unittest.TestCase):
         cmv_changed = Cmv(self.parameters, test_points, len(test_points))
         result = cmv_changed.lic11()
         self.assertFalse(result)
+    
+    def test_lic14(self) -> None:
+        params=self.parameters.copy()
+        
+        # Test Case 1: -> False
+        # AREA1>=0, AREA2>=0, E_PTS>=1 , F_PTS>=1 but NUMPOINTS<5
+        points=np.array([
+            [1,1],
+            [2,2],
+            [3,3],
+            [4,4],
+        ])
+        params['AREA1'] = 1
+        params['AREA2'] = 1
+        params['E_PTS'] = 1
+        params['F_PTS'] = 1
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+        
+        # From here, points are fixed below
+        points = np.array([
+            [6, 5],
+            [3, 6],
+            [1, 1],
+            [12, 10],
+            [7, 5],
+            [5, 6],
+            [1, 5],
+            [4, 8],
+            [1, 3],
+            [7, 4],
+            [5, 5],
+            [4, 1]]
+        )
+        
+        # Test Case 2: -> False
+        # NUMPOINTS>=5, AREA2>=0, E_PTS>=1, F_PTS>=1,
+        # E_PTS+F_PTS<=NUMPOINTS-3 but AREA1<0
+        params['AREA1'] = -1
+        params['AREA2'] = 1
+        params['E_PTS'] = 1
+        params['F_PTS'] = 1
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+        # Test Case 3: -> False
+        # NUMPOINTS>=5, AREA1>=0, E_PTS>=1, F_PTS>=1,
+        # E_PTS+F_PTS<=NUMPOINTS-3 but AREA2<0
+        params['AREA1'] = 1
+        params['AREA2'] = -1
+        params['E_PTS'] = 1
+        params['F_PTS'] = 1
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+        # Test Case 4: -> False
+        # NUMPOINTS>=5, AREA1>=0, AREA2>=0, F_PTS>=1,
+        # E_PTS+F_PTS<=NUMPOINTS-3 but E_PTS<1
+        params['AREA1'] = 1
+        params['AREA2'] = 1
+        params['E_PTS'] = 0
+        params['F_PTS'] = 1
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+        # Test Case 5: -> False
+        # NUMPOINTS>=5, AREA1>=0, AREA2>=0, E_PTS>=1,
+        # E_PTS+F_PTS<=NUMPOINTS-3 but F_PTS<1
+        params['AREA1'] = 1
+        params['AREA2'] = 1
+        params['E_PTS'] = 1
+        params['F_PTS'] = 0
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+        # Test Case 6: -> False
+        # NUMPOINTS>=5, AREA1>=0, AREA2>=0, E_PTS>=1,
+        # F_PTS>=1 but E_PTS+F_PTS>NUMPOINTS-3
+        params['AREA1'] = 1
+        params['AREA2'] = 1
+        params['E_PTS'] = 4
+        params['F_PTS'] = 5
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+        # Test Case 7: -> True
+        # passed
+        params['AREA1'] = 5
+        params['AREA2'] = 1
+        params['E_PTS'] = 3
+        params['F_PTS'] = 4
+        self.assertTrue(Cmv(params, points, len(points)).lic14())
+        
+        # Test Case 8: -> False
+        # AREA1 is larger than any areas formed by three points 
+        # chosen from the conditions
+        params['AREA1'] = 6
+        params['AREA2'] = 1
+        params['E_PTS'] = 3
+        params['F_PTS'] = 4
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+        # Test Case 9: -> False
+        # AREA2 is smaller than any areas formed by three points 
+        # chosen from the conditions
+        params['AREA1'] = 5
+        params['AREA2'] = 0
+        params['E_PTS'] = 3
+        params['F_PTS'] = 4
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+        # Test Case 10: -> False
+        # AREA1 is larger than any areas formed by three points 
+        # chosen from the conditions and
+        # AREA2 is smaller than any areas formed by three points 
+        # chosen from the conditions
+        params['AREA1'] = 6
+        params['AREA2'] = 1
+        params['E_PTS'] = 3
+        params['F_PTS'] = 4
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
+        
+    
 
 if __name__ == '__main__':
     unittest.main()
