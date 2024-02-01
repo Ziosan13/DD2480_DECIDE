@@ -136,6 +136,45 @@ class test_decide(unittest.TestCase):
         # Expected behavior: comuted FUV not is equal to the not_expected FUV.
         self.assertFalse((self.decide.compute_fuv() == not_expected_fuv).all())
 
+    def test_puv(self):
+        # Test Case 1:
+        # Input:
+        # - PUV is all 1s
+        # Expected behavior: PUV is equal to the expected PUV.
+        expected_puv = [True for _ in range(15)]
+        self.decide.load_puv_from_file('../data/puv_test_1.txt')
+        self.assertTrue((self.decide.puv == expected_puv).all())
+
+        # Test Case 2:
+        # Input:
+        # - PUV is all 0s
+        # Expected behavior: PUV is equal to the expected PUV.
+        expected_puv = [False for _ in range(15)]
+        self.decide.load_puv_from_file('../data/puv_test_0.txt')
+        self.assertTrue((self.decide.puv == expected_puv).all())
+
+        # Test Case 3:
+        # Input:
+        # - PUV is not of length 15
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            self.decide.load_puv_from_file('../data/puv_test_17_inputs.txt')
+        
+        # Test Case 4:
+        # Input:
+        # - PUV has a wrong value (3)
+        # Expected behavior: raises ValueError.
+        with self.assertRaises(ValueError):
+            self.decide.load_puv_from_file('../data/puv_test_none_01_char.txt')
+        
+        # Test Case 5:
+        # Input:
+        # - PUV validity test
+        # Expected behavior: PUV is equal to the expected PUV.
+        expected_puv = [True, True, False, False, True, True, True, False, True, True, False, True, False, True, True]
+        self.decide.load_puv_from_file('../data/puv_test_valid.txt')
+        self.assertTrue((self.decide.puv == expected_puv).all())
+
     def test_compute_pum_true(self):
         # Test Case 1:
         # Input:
