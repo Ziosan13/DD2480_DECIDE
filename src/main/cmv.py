@@ -58,6 +58,9 @@ class Cmv:
         return self.cmv
 
     def lic0(self):
+        if (self.length1 < 0 or self.num_points < 2):
+            return False
+
         for i in range(len(self.points)-1):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]
@@ -74,6 +77,9 @@ class Cmv:
     def lic1(self):
 
         if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
+            return False
+        
+        if (self.num_points < 3):
             return False
         
         for i in range(self.num_points-2):
@@ -132,6 +138,11 @@ class Cmv:
             return False
 
     def lic2(self):
+        if (self.epsilon < 0 or self.epsilon > np.pi):
+            return False
+        if (self.num_points < 3):
+            return False
+
         for i in range(self.num_points-2):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]
