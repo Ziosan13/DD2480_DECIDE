@@ -146,7 +146,7 @@ class Decide:
         # compute PUM
 
         # compute FUV
-        compute_fuv()
+        self.compute_fuv()
 
         # compute LAUNCH
 
