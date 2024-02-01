@@ -237,7 +237,44 @@ class test_decide(unittest.TestCase):
 
         self.assertTrue(decide_instance.launch)
 
+        # Test Case 3:
+        # - LCM and PUV are such that only LICs 4, 7, 10, 13 matter
+        # - They must all be True 
+        numpoints = 5
+        points = np.array([[-1,-1], [1,1], [-1,1], [1,-1], [2,2]])
+        puv = np.array([False, False, False, False, True, False, False, True, False, False, True, False, False, True, False])
+        parameters = {
+            "LENGTH1": 0.5,
+            "RADIUS1": 0.5,
+            "EPSILON": 0.0,
+            "AREA1": 0.1,
+            "Q_PTS": 3,
+            "QUADS": 2,
+            "DIST": 10.0,
+            "N_PTS": 3, 
+            "K_PTS": 1,
+            "A_PTS": 1,
+            "B_PTS": 1,
+            "C_PTS": 1,
+            "D_PTS": 1,
+            "E_PTS": 1,
+            "F_PTS": 1,
+            "G_PTS": 1,
+            "LENGTH2": 10.0,
+            "RADIUS2": 10.0,
+            "AREA2": 10.0
+        }
+        decide_instance = Decide(numpoints, points, parameters, None, puv)
+        decide_instance.load_lcm_from_file('../data/lcm_testcase_3.txt')
 
+        # Making sure relevant LICs i.e. 4, 7, 10, 13 are True
+        self.assertTrue(decide_instance.cmv.cmv[4])
+        self.assertTrue(decide_instance.cmv.cmv[7])
+        self.assertTrue(decide_instance.cmv.cmv[10])
+        self.assertTrue(decide_instance.cmv.cmv[13])
+
+        decide_instance.decide()
+        self.assertTrue(decide_instance.launch)
 
 if __name__ == '__main__':
     unittest.main()
