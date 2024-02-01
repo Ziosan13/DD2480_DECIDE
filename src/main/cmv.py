@@ -58,6 +58,9 @@ class Cmv:
         return self.cmv
 
     def lic0(self):
+        if (self.length1 < 0 or self.num_points < 2):
+            return False
+
         for i in range(len(self.points)-1):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]

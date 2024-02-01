@@ -108,6 +108,26 @@ class test_cmv(unittest.TestCase):
         params["LENGTH1"] = 4
         self.assertTrue(Cmv(params, points, num_points).lic0())
 
+        # Test Case 9:
+        # Input:
+        # LENGTH1 is -1
+        # Pair of points are 1 unit apart.
+        # Expect: LIC0 is false
+        params["LENGTH1"] = -1
+        points = np.array([[1, 1],[2, 1],[3, 1]])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic0())
+
+        # Test Case 10:
+        # Input:
+        # LENGTH1 is 1
+        # No points
+        # Expect: LIC0 is false
+        params["LENGTH1"] = 1
+        points = np.array([])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic0())
+
     def test_lic_2(self):
         params = self.parameters.copy()
         points = np.array([[1, 1],[0, 0],[0, 1]]) 
