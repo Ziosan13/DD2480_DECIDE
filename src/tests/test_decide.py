@@ -136,6 +136,47 @@ class test_decide(unittest.TestCase):
         # Expected behavior: comuted FUV not is equal to the not_expected FUV.
         self.assertFalse((self.decide.compute_fuv() == not_expected_fuv).all())
 
+    def test_compute_pum_true(self):
+        # Test Case 1:
+        # Input:
+        # - CMV and LCM is as in example from specification
+        # - Expected PUM is as example from specification
+        # Expected behavior: PUM is equal to the expected PUM.
+        test_cmv = [False,True,True,True,False,False,True,False,True,False,True,False,True,False]
+        self.decide.load_lcm_from_file('../data/lcm_example_1.txt')
+        pum_array = [[True,False,True,False],
+                        [False,True,True,True],
+                        [True,True,True,True],
+                        [False,True,True,True]]
+        expected_pum = np.vstack([
+            np.c_[pum_array, np.full((4, 11), True)], 
+            np.full((11, 15), True)
+        ])
+        
+        output_pum = self.decide.calc_pum(self.decide.lcm,test_cmv)
+
+        self.assertTrue((output_pum == expected_pum).all())
+        
+    def test_compute_pum_false(self):
+        # Test Case 1:
+        # Input:
+        # - CMV and LCM is as in example from specification
+        # - Expected PUM has been changed to not be the same as from specification
+        # Expected behavior: PUM is not equal to the expected PUM.
+        test_cmv = [False,True,True,True,False,False,True,False,True,False,True,False,True,False]
+        self.decide.load_lcm_from_file('../data/lcm_example_1.txt')
+        pum_array = [[False,False,False,False],
+                        [False,True,True,True],
+                        [True,True,True,True],
+                        [False,True,True,True]]
+        expected_pum = np.vstack([
+            np.c_[pum_array, np.full((4, 11), True)], 
+            np.full((11, 15), True)
+        ])
+        
+        output_pum = self.decide.calc_pum(self.decide.lcm,test_cmv)
+
+        self.assertFalse((output_pum == expected_pum).all())
 
 if __name__ == '__main__':
     unittest.main()
