@@ -1122,6 +1122,121 @@ class test_cmv(unittest.TestCase):
         cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
         result = cmv_changed.lic9()
         self.assertFalse(result)
+
+    # Test that LIC is false if c_pts is too small whilst d_pts is okay
+    def test_lic9_c_pts_too_small_d_pts_ok(self):
+        test_points = np.array([
+                        [5.0, 2.0],
+                        [8.0, 6.0],
+                        [3.0, -2.0],
+                        [2.0, 2.0],
+                        [1.0,3.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0,1.0],
+                        [1.0, 2.0],
+                        [5.0,2.0]
+                    ])
+
+        parameters_changed = self.parameters.copy()
+        parameters_changed["C_PTS"] = 0
+        parameters_changed["D_PTS"] = 3
+
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic9()
+        self.assertFalse(result)
+
+    
+    # Test that LIC is false if to few points are given
+    def test_lic9_not_enough_points(self):
+        test_points = np.array([
+                        [5.0, 2.0],
+                        [8.0, 6.0],
+                        [3.0, -2.0]
+                    ])
+
+        parameters_changed = self.parameters.copy()
+        parameters_changed["C_PTS"] = 2
+        parameters_changed["D_PTS"] = 3
+
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic9()
+        self.assertFalse(result)
+
+
+    # Test that LIC is false if epsilon is negative
+    def test_lic9_epsilon_negative(self):
+        test_points = np.array([
+                        [5.0, 2.0],
+                        [8.0, 6.0],
+                        [3.0, -2.0],
+                        [2.0, 2.0],
+                        [1.0,3.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0,1.0],
+                        [1.0, 2.0],
+                        [5.0,2.0]
+                    ])
+
+        parameters_changed = self.parameters.copy()
+        parameters_changed["EPSILON"] = -3
+
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic9()
+        self.assertFalse(result)
+
+    # Test that LIC is false if epsilon is negative
+    def test_lic9_epsilon_too_big(self):
+        test_points = np.array([
+                        [5.0, 2.0],
+                        [8.0, 6.0],
+                        [3.0, -2.0],
+                        [2.0, 2.0],
+                        [1.0,3.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0,1.0],
+                        [1.0, 2.0],
+                        [5.0,2.0]
+                    ])
+
+        parameters_changed = self.parameters.copy()
+        parameters_changed["EPSILON"] = 10
+
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic9()
+        self.assertFalse(result)
+
+     # Test that LIC is false if sum of c_pts and d_pts is bigger than numPoints-3
+    def test_lic9_epsilon_too_big(self):
+        test_points = np.array([
+                        [5.0, 2.0],
+                        [8.0, 6.0],
+                        [3.0, -2.0],
+                        [2.0, 2.0],
+                        [1.0,3.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0,1.0],
+                        [1.0, 2.0],
+                        [5.0,2.0]
+                    ])
+
+        parameters_changed = self.parameters.copy()
+        parameters_changed["C_PTS"] = 10
+        parameters_changed["D_PTS"] = 10
+
+
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic9()
+        self.assertFalse(result)
+
         
     def test_lic_10(self) -> None:
         params=self.parameters.copy()
@@ -1677,7 +1792,6 @@ class test_cmv(unittest.TestCase):
         parameters_changed["K_PTS"] = 3
 
         cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
-        print(str(cmv_changed.k_pts) + " kpts")
         result = cmv_changed.lic7()
         self.assertFalse(result)
 
@@ -1699,9 +1813,71 @@ class test_cmv(unittest.TestCase):
         parameters_changed["K_PTS"] = 2
 
         cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
-        print(str(cmv_changed.k_pts) + " kpts")
         result = cmv_changed.lic7()
         self.assertTrue(result)
+
+    def test_lic7_length_smaller_than_0(self):
+    # Tests that if length1<0 lic is false
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [6.0, 5.0]
+                    ])
+        parameters_changed = copy.deepcopy(self.parameters)
+        parameters_changed["LENGTH1"] = -3
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic7()
+        self.assertFalse(result)
+
+    def test_lic7_k_pts_smaller_than_1(self):
+        # Tests that if k_pts <1 lic is false
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [6.0, 5.0]
+                    ])
+        parameters_changed = copy.deepcopy(self.parameters)
+        parameters_changed["K_PTS"] = 0
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic7()
+        self.assertFalse(result)
+
+    def test_lic7_k_pts_too_big(self):
+        # Tests that if k_pts >= numPoints+2, lic is false
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [2.0, 2.0],
+                        [1.0, 2.0],
+                        [6.0, 5.0]
+                    ])
+        parameters_changed = copy.deepcopy(self.parameters)
+        parameters_changed["K_PTS"] = 15
+
+        cmv_changed = Cmv(parameters_changed, test_points, len(test_points))
+        result = cmv_changed.lic7()
+        self.assertFalse(result)
 
     # Tests that there exists at least one set of two data points,
     #(X[i],Y[i]) and (X[j],Y[j]), 
@@ -1863,6 +2039,62 @@ class test_cmv(unittest.TestCase):
         self.assertFalse(Cmv(params, points, len(points)).lic14())
         
     
+
+    
+    #Tests that LIC is not true when too few points are given
+    def test_lic11_too_few_points(self):  
+        test_points = np.array([
+                        [1.0, 2.0]
+                    ])
+
+        cmv_changed = Cmv(self.parameters, test_points, len(test_points))
+        result = cmv_changed.lic11()
+        self.assertFalse(result)
+    
+    #Tests that LIC is not true when g_pts is smaller than 1
+    def test_lic11_g_pts_too_small(self):  
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [3.0, 2.0],
+                        [4.0, 2.0],
+                        [5.0, 2.0],
+                        [6.0, 2.0],
+                        [7.0, 2.0],
+                        [8.0, 5.0]
+                    ])
+        
+        parameters_changed = copy.deepcopy(self.parameters)
+        parameters_changed["G_PTS"] = -1
+
+        cmv_changed = Cmv(self.parameters, test_points, len(test_points))
+        result = cmv_changed.lic11()
+        self.assertFalse(result)
+    
+    # Tests that LIC is false if g_pts is bigger than numpoints -2
+    def test_lic11_g_pts_too_big(self):  
+        test_points = np.array([
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [1.0, 2.0],
+                        [2.0, 2.0],
+                        [3.0, 2.0],
+                        [4.0, 2.0],
+                        [5.0, 2.0],
+                        [6.0, 2.0],
+                        [7.0, 2.0],
+                        [8.0, 5.0]
+                    ])
+        
+        parameters_changed = copy.deepcopy(self.parameters)
+        parameters_changed["G_PTS"] = 15
+
+        cmv_changed = Cmv(self.parameters, test_points, len(test_points))
+        result = cmv_changed.lic11()
+        self.assertFalse(result)
+
 
 if __name__ == '__main__':
     unittest.main()
