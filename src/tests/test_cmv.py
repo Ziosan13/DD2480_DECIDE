@@ -108,6 +108,26 @@ class test_cmv(unittest.TestCase):
         params["LENGTH1"] = 4
         self.assertTrue(Cmv(params, points, num_points).lic0())
 
+        # Test Case 9:
+        # Input:
+        # LENGTH1 is -1
+        # Pair of points are 1 unit apart.
+        # Expect: LIC0 is false
+        params["LENGTH1"] = -1
+        points = np.array([[1, 1],[2, 1],[3, 1]])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic0())
+
+        # Test Case 10:
+        # Input:
+        # LENGTH1 is 1
+        # No points
+        # Expect: LIC0 is false
+        params["LENGTH1"] = 1
+        points = np.array([])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic0())
+
     def test_lic_2(self):
         params = self.parameters.copy()
         points = np.array([[1, 1],[0, 0],[0, 1]]) 
@@ -205,6 +225,27 @@ class test_cmv(unittest.TestCase):
         # Expect: LIC2 is false 
         params["EPSILON"] = 1
         self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        # Test Case 11:
+        # Input:
+        # EPSILON is -1
+        # Points form an angle = pi/2
+        # Expect: LIC2 is false
+        params["EPSILON"] = -1
+        points = np.array([[1, 0],[0, 0],[0, 1]])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        # Test Case 12:
+        # Input:
+        # EPSILON is 1
+        # Only 2 points
+        # Expect: LIC2 is false
+        params["EPSILON"] = 1
+        points = np.array([[1, 1],[2, 1]])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+        
 
     def test_lic_1(self):
         params = self.parameters.copy()
@@ -336,6 +377,16 @@ class test_cmv(unittest.TestCase):
         # Points are colinear
         # Expect: LIC1 is false 
         params["RADIUS1"] = 5
+        self.assertFalse(Cmv(params, points, num_points).lic1())
+
+        # Test Case 14:
+        # Input:
+        # RADIUS1 is 1
+        # Only 2 points
+        # Expect: LIC1 is false
+        params["RADIUS1"] = 1
+        points = np.array([[1, 1],[2, 1]])
+        num_points = points.shape[0]
         self.assertFalse(Cmv(params, points, num_points).lic1())
 
     def test_lic_3(self) -> None:
