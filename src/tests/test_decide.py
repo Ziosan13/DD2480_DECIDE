@@ -31,7 +31,10 @@ class test_decide(unittest.TestCase):
             "AREA2": 1
         }
         lcm = rng.random((15,15))
-        puv = rng.random((15))
+        #puv = rng.random((15))
+        
+        #puv from example
+        puv = [True,False,True,False,True,False,True,False,True,False,True,False,True,False,True]
 
         # Initialize Decide instance
         self.decide = Decide(numpoints, points, self.parameters, lcm, puv)
@@ -93,6 +96,45 @@ class test_decide(unittest.TestCase):
         # Expected behavior: raises ValueError.
         with self.assertRaises(ValueError):
             self.decide.load_lcm_from_file('../data/lcm_test_wrong_value.txt')
+
+    def test_compute_fuv(self):
+
+        # Example pum-matrix
+        self.decide.pum = [['*',False,True,False,True,False,True,False,True,False,True,False,True,False,True],
+                           [False,'*',True,True,True,True,True,True,True,True,True,True,True,True,True],
+                           [True,True,'*',True,True,True,True,True,True,True,True,True,True,True,True],
+                           [False,True,True,'*',True,True,True,True,True,True,True,True,True,True,True],
+                           [True,True,True,True,'*',True,True,True,True,True,True,True,True,True,True],
+                           [False,True,True,True,True,'*',True,True,True,True,True,True,True,True,True],
+                           [True,True,True,True,True,True,'*',True,True,True,True,True,True,True,True],
+                           [False,True,True,True,True,True,True,'*',True,True,True,True,True,True,True],
+                           [True,True,True,True,True,True,True,True,'*',True,True,True,True,True,True],
+                           [False,True,True,True,True,True,True,True,True,'*',True,True,True,True,True],
+                           [True,True,True,True,True,True,True,True,True,True,'*',True,True,True,True],
+                           [False,True,True,True,True,True,True,True,True,True,True,'*',True,True,True],
+                           [True,True,True,True,True,True,True,True,True,True,True,True,'*',True,True],
+                           [False,True,True,True,True,True,True,True,True,True,True,True,True,'*',True],
+                           [True,True,True,True,True,True,True,True,True,True,True,True,True,True,'*']]
+
+        # The expected fuv for the puv and pum given
+        expected_fuv = [False,True,True,True,True,True,True,True,True,True,True,True,True,True,True]        
+
+        # Test Case 1:
+        # Input:
+        # - PUM and PUV is as in example from specification
+        # - Expected FUV is computed from these
+        # Expected behavior: FUV is equal to the expected FUV.
+        self.assertTrue((self.decide.compute_fuv() == expected_fuv).all())
+
+        # Another fuv, that is not the expected one
+        not_expected_fuv = [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False]        
+
+        # Test Case 2:
+         # Input:
+        # - PUM and PUV is as in example from specification
+        # - A FUV that is not the expected one is constructed 
+        # Expected behavior: comuted FUV not is equal to the not_expected FUV.
+        self.assertFalse((self.decide.compute_fuv() == not_expected_fuv).all())
 
 
 if __name__ == '__main__':
