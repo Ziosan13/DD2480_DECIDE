@@ -407,7 +407,7 @@ class Cmv:
         
         flag_1, flag_2= False, False
         
-        if (self.num_points < 3) or self.length2 <0:
+        if (self.num_points < 3) or self.length2 <0 or self.k_pts < 1 or self.k_pts > self.num_points - 2:
             return False
 
         for i in range(self.num_points - (self.k_pts + 1)):
