@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DECIDE Program Result</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>DECIDE Program Result</h2>
+    <p>Final launch decision:</p>
+    {% if decision %}
+        <p><strong>YES</strong></p>
+        <p><strong>Launching in 3..2..1..</strong></p>
+    {% else %}
+        <p><strong>NO</strong></p>
+        <p><strong>No launch. Stand down.</strong></p>
+    {% endif %}
+    <a href="/">Return to Input Form</a>
+</body>
+</html>
