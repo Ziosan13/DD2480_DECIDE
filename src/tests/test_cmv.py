@@ -1219,7 +1219,109 @@ class test_cmv(unittest.TestCase):
         params["F_PTS"] = 4
         self.assertFalse(Cmv(params, points, len(points)).lic10())
         
-
+    def test_lic_12(self) -> None:
+        params = self.parameters.copy()
+        
+        # Test Case 1: -> False
+        # NUMPOINTS<3, LENGTH1<0, LENGTH2<0, K_PTS<1
+        points = np.array([
+            [6, 5],
+            [3, 6]]
+        )
+        params["LENGTH1"] = -1
+        params["LENGTH2"] = -1
+        params["K_PTS"] = 0
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
+        # Test Case 2: -> False
+        # LENGTH1>=0, LENGTH2>=0,K_PTS>=1, but NUMPOINTS<3
+        params["LENGTH1"] = 1
+        params["LENGTH2"] = 1
+        params["K_PTS"] = 1
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
+        # From here, points are fixed below
+        points = np.array([
+            [6, 5],
+            [3, 6],
+            [1, 1]]
+        )
+        
+        # Test Case 3: -> False
+        # NUMPOINTS>=3, LENGTH1>=0, LENGTH2>=0, K_PTS>=1, 
+        # but K_PTS > NUMPOINT-2
+        points = np.array([
+            [6, 5],
+            [3, 6],
+            [1, 1]]
+        )
+        params["LENGTH1"] = 1
+        params["LENGTH2"] = 1
+        params["K_PTS"] = 2
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
+        # From here, points are fixed below
+        points = np.array([
+            [6, 5],
+            [3, 6],
+            [1, 1],
+            [12, 10],
+            [7, 5]]
+        )
+        
+        # Test Case 4: -> False
+        # NUMPOINTS>=3, LENGTH2>=0, K_PTS>=1, K_PTS <= NUMPOINT-2, 
+        # but LENGTH1<0
+        params["LENGTH1"] = -1
+        params["LENGTH2"] = 1
+        params["K_PTS"] = 2
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
+        # Test Case 5: -> False
+        # NUMPOINTS>=3, LENGTH1>=0, K_PTS>=1, K_PTS <= NUMPOINT-2, 
+        # but LENGTH2<0
+        params["LENGTH1"] = 1
+        params["LENGTH2"] = -1
+        params["K_PTS"] = 2
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
+        # Test Case 6: -> False
+        # NUMPOINTS>=3, LENGTH1>=0, LENGTH2>=0, K_PTS <= NUMPOINT-3, 
+        # but K_PTS<1
+        params["LENGTH1"] = 1
+        params["LENGTH2"] = 1
+        params["K_PTS"] = 0
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
+        # Test Case 7: -> True
+        # passed
+        params["LENGTH1"] = 7
+        params["LENGTH2"] = 5
+        params["K_PTS"] = 2
+        self.assertTrue(Cmv(params, points, len(points)).lic12())
+        
+        # Test Case 8: -> False
+        # LENGTH1 is longer than any distances
+        params["LENGTH1"] = 8
+        params["LENGTH2"] = 5
+        params["K_PTS"] = 2
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
+        # Test Case 9: -> False
+        # LENGTH2 is shorter than any distances
+        params["LENGTH1"] = 7
+        params["LENGTH2"] = 4
+        params["K_PTS"] = 2
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
+        # Test Case 10: -> False
+        # LENGTH1 is longer than any distances and
+        # LENGTH2 is shorter than any distances 
+        params["LENGTH1"] = 7
+        params["LENGTH2"] = 4
+        params["K_PTS"] = 2
+        self.assertFalse(Cmv(params, points, len(points)).lic12())
+        
     def test_lic_13(self) -> None:
         params = self.parameters.copy()
 
