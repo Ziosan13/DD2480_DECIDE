@@ -109,6 +109,23 @@ class Decide:
         
         self.lcm = lcm
 
+    def compute_fuv(self):
+        for i in range(15):
+            if self.puv[i] == False: # If puv[i] is false, fuv[i] is always true
+                self.fuv[i] = True
+            
+            else:   # else we check if
+                falseFound = False
+
+                for j in range(15): 
+                    if i != j and self.pum[i][j] == False:
+                        falseFound = True
+
+                if not falseFound:
+                    self.fuv[i] = True
+        
+        return self.fuv
+
 
     def decide(self) -> None:
         """
@@ -129,6 +146,7 @@ class Decide:
         # compute PUM
 
         # compute FUV
+        self.compute_fuv()
 
         # compute LAUNCH
 
