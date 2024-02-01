@@ -2,48 +2,41 @@
 
 The DECIDE program generates a boolean signal which determines whether an interceptor should be launched or not.
 
-## Description
+## Variables
 
 The DECIDE program uses 5 inputs: 
-- NUMPOINTS (the number of planar data points on radar tracking), 
-- POINTS (an array containing the coordinates of data points), 
-- PARAMETERS (a dictionary holding various parameters used by the program - see list of parameters below), 
-- LCM (a 15x15 logical connector matrix which determines boolean relationships between the various conditions needed to be fulfilled - it contains values among "NOTUSED", "ANDD" and "ORR")
-- PUV (a preliminary unlocking vector - it contains boolean values determining if some conditions should hold back the launch of the interceptor). 
+- NUMPOINTS : the number of planar data points on radar tracking 
+- POINTS : an array containing the coordinates of data points
+- PARAMETERS : a dictionary holding various parameters used by the program - see matrix of parameters below
+- LCM : a 15x15 logical connector matrix which determines boolean relationships between the various conditions needed to be fulfilled - it contains values among "NOTUSED", "ANDD" and "ORR"
+- PUV : a preliminary unlocking vector - it contains boolean values determining if some conditions should hold back the launch of the interceptor
+
 Using these, a boolean signal is generated and "YES" or "NO" is printed to the standard output based on the decision.
 
-### List of parameters
+### Matrix of parameters
 The parameters in the PARAMETERS dictionary are as follow:
-- LENGTH1 (float) : Length in LICs 0, 7, 12
-- RADIUS1 (float) : Radius in LICs 1, 8, 13
-- EPSILON (float) : Deviation from PI in LICs 2, 9
-- AREA1 (float) : Area in LICs 3, 10, 14
-- Q_PTS (int)  : No. of consecutive points in LIC 4
-- QUADS (int) : No. of quadrants in LIC 4 
-- DIST (double) : Distance in LIC 6
-- N_PTS (int) : No. of consecutive pts. in LIC 6
-- K_PTS (int) : No. of int. pts. in LICs 7, 12
-- A_PTS (int) : No. of int. pts. in LICs 8, 13
-- B_PTS (int) : No. of int. pts. in LICs 8, 13
-- C_PTS (int) : No. of int. pts. in LIC 9
-- D_PTS (int) : No. of int. pts. in LIC 9
-- E_PTS (int) : intGPTS; double LENGTH2; double RADIUS2 ; double AREA2;
-- F_PTS (int) :
-- G_PTS (int) :
-// Length in LICs 0, 7, 12
-// Radius in LICs 1, 8, 13
-// Deviation from PI in LICs 2, 9
-// Area in LICs 3, 10, 14
-// No. of consecutive points in LIC 4 // No. of quadrants in LIC 4
-// Distance in LIC 6
-// 
-// No. of int. pts. in LICs
-// No. of int. pts. in LICs
-// No. of int. pts. in LICs
-//  //  // No. of int. pts. in LICs
-// No. of int. pts. in LICs
-// No. of int. pts. in LIC 11 // Maximum length in LIC 12
-// Maximum radius in LIC 13 // Maximum area in LIC 14
+
+| Parameter name | type | description |
+| --- | --- | --- |
+| LENGTH1 | float | Length in LICs 0, 7, 12 |
+| RADIUS1 | float | Radius in LICs 1, 8, 13 |
+| EPSILON | float | Deviation from PI in LICs 2, 9 |
+| AREA1 | float | Area in LICs 3, 10, 14 |
+| Q_PTS | int | No. of consecutive points in LIC 4 |
+| QUADS | int | No. of quadrants in LIC 4 |
+| DIST | double | Distance in LIC 6 |
+| N_PTS | int | No. of consecutive pts. in LIC 6 |
+| K_PTS | int | No. of int. pts. in LICs 7, 12 |
+| A_PTS | int | No. of int. pts. in LICs 8, 13 |
+| B_PTS | int | No. of int. pts. in LICs 8, 13 |
+| C_PTS | int | No. of int. pts. in LIC 9 |
+| D_PTS | int | No. of int. pts. in LIC 9 |
+| E_PTS | int | No. of int. pts. in LICs 10, 14 |
+| F_PTS | int | No. of int. pts. in LICs 10, 14 |
+| G_PTS | int | No. of int. pts. in LIC 11 |
+| LENGTH2 | double | Maximum length in LIC 12 |
+| RADIUS2 | double | Maximum radius in LIC 13 |
+| AREA2 | double | Maximum area in LIC 14 |
 
 ## Getting Started
 
