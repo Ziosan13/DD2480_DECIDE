@@ -3,14 +3,9 @@
 The DECIDE program generates a boolean signal which determines whether an interceptor should be launched or not.
 
 ## How it works
-This determines which combination of the several possible Launch Interceptor Conditions (LIC’s) are relevant to the immediate situation. The interceptor launch button is normally considered locked; only if all relevant combinations of launch conditions are met will the launch- unlock signal be issued.
+It determines which combination of the several possible Launch Interceptor Conditions (LIC’s) are relevant to the immediate situation. The interceptor launch button is normally considered locked; only if all relevant combinations of launch conditions are met will the launch- unlock signal be issued.
 
-This determines whether each of fifteen LIC’s is true for an input set of up to 100 planar data points representing radar echoes. The fifteen elements of a Conditions Met Vector (CMV) will be assigned boolean values true or false; each element of the CMV corresponds to one LIC’s condition.
-
-The input Logical Connector Matrix (LCM), defines which individual LIC’s must be considered jointly in some way. The LCM is a 15x15 symmetric matrix with elements valued ANDD, ORR, or NOTUSED. The combination of LCM and CMV is stored in the Preliminary Unlocking Matrix (PUM), a 15x15 symmetric matrix.
-
-
-Another input, the Preliminary Unlocking Vector (PUV) represents which LIC actually matters in this particular launch determination. Each element of the UV indicates how to combine the PUM values to form the corresponding element of the Final Unlocking Vector (FUV), a 15-element vector. If, and only if, all the values in the FUV are true, should the launch-unlock signal be generated.
+It determines whether each of fifteen LIC’s is true for an input set of up to 100 planar data points representing radar echoes. The fifteen elements of a Conditions Met Vector (CMV) will be assigned boolean values true or false; each element of the CMV corresponds to one LIC’s condition.
 
 ## Variables
 
@@ -107,9 +102,12 @@ To get to the next level, **"Working well"**, we need to become more comfortable
 
 ## Statement of contributions
 
-* Eloi Dieme: initialized Decide class; implemented LICs 3, 8 and 13 ; implemented documentation generation ; implemented LCM matrix; reviewed some pull requests; participated in writing README file and "Assess the way of working".
+* Eloi Dieme: initialized Decide class; implemented LICs 3, 8 and 13 and corresponding tests ; implemented documentation generation ; implemented LCM matrix; reviewed some pull requests; participated in writing README file and "Assess the way of working" ; implemented LAUNCH signal and 3 tests for the decide function ; implemented a simple front-end using Flask.
 
-* Hugo Malmberg:
-* Olivia Aronsson:
-* Lovisa Strange:
-* Yuta Ojima:
+* Hugo Malmberg: Initialized CMV class, Implemented LICs 4, 5 and 6, Implemented PUV load from file, reviewed some pull requests, some bug fixes.
+
+* Olivia Aronsson: Implemented test suite for CMV and Decide class; Implemented LICs 7, 9 and 11; Implemented PUM function.
+
+* Lovisa Strange:  Written LIC 0,1,2 and corresponding tests. Written function that computes FUV. Participated in reviewing code by other group members. Participated in writing README and assessment of way of working.
+
+* Yuta Ojima : Implemented LIC 10, 12 and 14 with some test cases; Organize README; Review and revise someones's code; Discuss whether LIC should return ValueError or not;
