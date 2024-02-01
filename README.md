@@ -5,11 +5,14 @@ The DECIDE program generates a boolean signal which determines whether an interc
 ## Variables
 
 The DECIDE program uses 5 inputs: 
-- NUMPOINTS : the number of planar data points on radar tracking 
-- POINTS : an array containing the coordinates of data points
-- PARAMETERS : a dictionary holding various parameters used by the program - see matrix of parameters below
-- LCM : a 15x15 logical connector matrix which determines boolean relationships between the various conditions needed to be fulfilled - it contains values among "NOTUSED", "ANDD" and "ORR"
-- PUV : a preliminary unlocking vector - it contains boolean values determining if some conditions should hold back the launch of the interceptor
+- **NUMPOINTS** : the number of planar data points on radar tracking 
+- **POINTS** : an array containing the coordinates of data points
+- **PARAMETERS** : a dictionary holding various parameters used by the program 
+    - see matrix of parameters below
+- **LCM** : a 15x15 logical connector matrix which determines boolean relationships between the various conditions needed to be fulfilled 
+    - it contains values among "NOTUSED", "ANDD" and "ORR"
+- **PUV** : a preliminary unlocking vector 
+    - it contains boolean values determining if some conditions should hold back the launch of the interceptor
 
 Using these, a boolean signal is generated and "YES" or "NO" is printed to the standard output based on the decision.
 
@@ -86,7 +89,11 @@ code blocks for commands
 
 ## Assessment of way of working
 
-From looking at the checklist, we agree that our way of working currently fulfills the "In Place"-level. We think this because the tools that we are using, for example GitHub issues and pull requests, are working well and are helping the team work efficiently on what needs to be done. Also, all team members are involved in reviewing and improving each other's work, which is also helping the team work better. This is in line with what the requirements for this level states. To get to the next level, "Working well", we need to become more comfortable with working this way, as the requirements state that the way of working should come naturally and not require much effort from the team members. The way of working should also be adjusted as needed to support the work being done. By continuing to work in this way, we will become more confident in our way of working. By also continuing to evaluate how the work is going, we can reach the next state.  
+From looking at the checklist, we agree that our way of working currently fulfills the **"In Place"-level**. 
+
+We think this because the tools that we are using, for example GitHub issues and pull requests, are working well and are helping the team work efficiently on what needs to be done. Also, all team members are involved in reviewing and improving each other's work, which is also helping the team work better. This is in line with what the requirements for this level states. 
+
+To get to the next level, **"Working well"**, we need to become more comfortable with working this way, as the requirements state that the way of working should come naturally and not require much effort from the team members. The way of working should also be adjusted as needed to support the work being done. By continuing to work in this way, we will become more confident in our way of working. By also continuing to evaluate how the work is going, we can reach the next state.  
 
 ## Statement of contributions
 
