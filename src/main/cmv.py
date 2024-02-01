@@ -254,7 +254,7 @@ class Cmv:
         
         lic_status = False
 
-        if ((self.num_points >= 3) and (self.k_pts >= 1)):
+        if ((self.num_points >= 3) and (self.k_pts >= 1) and (self.k_pts <= self.num_points-2) and (self.length1>=0)):
             for i in range(self.num_points - (self.k_pts + 1)):
 
                 p1 = self.points[i]
@@ -331,7 +331,7 @@ class Cmv:
         """
         lic_passed = False
 
-        if (self.c_pts > 0 and self.d_pts > 0 and self.num_points >= 5):
+        if (self.c_pts >= 1 and self.d_pts >= 1 and self.num_points >= 5 and (self.c_pts+self.d_pts <= self.num_points -3) and self.epsilon >= 0 and self.epsilon < np.pi):
 
             for i in range (self.num_points - (self.c_pts + self.d_pts + 2)):
                 p1 = self.points[i]
@@ -386,7 +386,7 @@ class Cmv:
         lic_passed = False
         j = self.g_pts + 1
 
-        if(self.num_points >=3 ):
+        if(self.num_points >=3 and self.g_pts >= 1 and self.g_pts<= self.num_points-2):
             for i in range(self.num_points - j):
                 x_1 = self.points[i][0]
                 x_2 = self.points[i+j][0]
