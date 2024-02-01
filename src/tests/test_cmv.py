@@ -358,6 +358,16 @@ class test_cmv(unittest.TestCase):
         params["RADIUS1"] = 5
         self.assertFalse(Cmv(params, points, num_points).lic1())
 
+        # Test Case 14:
+        # Input:
+        # RADIUS1 is 1
+        # Only 2 points
+        # Expect: LIC1 is false
+        params["RADIUS1"] = 1
+        points = np.array([[1, 1],[2, 1]])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic1())
+
     def test_lic_3(self) -> None:
         params = self.parameters.copy()
 

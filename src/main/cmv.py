@@ -79,6 +79,9 @@ class Cmv:
         if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
             return False
         
+        if (self.num_points < 3):
+            return False
+        
         for i in range(self.num_points-2):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]
