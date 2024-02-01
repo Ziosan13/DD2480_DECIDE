@@ -138,6 +138,11 @@ class Cmv:
             return False
 
     def lic2(self):
+        if (self.epsilon < 0 or self.epsilon > np.pi):
+            return False
+        if (self.num_points < 3):
+            return False
+
         for i in range(self.num_points-2):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]

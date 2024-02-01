@@ -226,6 +226,27 @@ class test_cmv(unittest.TestCase):
         params["EPSILON"] = 1
         self.assertFalse(Cmv(params, points, num_points).lic2())
 
+        # Test Case 11:
+        # Input:
+        # EPSILON is -1
+        # Points form an angle = pi/2
+        # Expect: LIC2 is false
+        params["EPSILON"] = -1
+        points = np.array([[1, 0],[0, 0],[0, 1]])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+
+        # Test Case 12:
+        # Input:
+        # EPSILON is 1
+        # Only 2 points
+        # Expect: LIC2 is false
+        params["EPSILON"] = 1
+        points = np.array([[1, 1],[2, 1]])
+        num_points = points.shape[0]
+        self.assertFalse(Cmv(params, points, num_points).lic2())
+        
+
     def test_lic_1(self):
         params = self.parameters.copy()
         points = np.array([[1, 1],[3, 1],[2, 1.5]]) 
