@@ -1,8 +1,8 @@
 import numpy as np
+import math
 from functools import reduce
 from math import isclose
 import math
-
 
 class Cmv:
     """
@@ -58,6 +58,9 @@ class Cmv:
         return self.cmv
 
     def lic0(self):
+        if (self.length1 < 0 or self.num_points < 2):
+            return False
+
         for i in range(len(self.points)-1):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]
@@ -74,6 +77,9 @@ class Cmv:
     def lic1(self):
 
         if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
+            return False
+        
+        if (self.num_points < 3):
             return False
         
         for i in range(self.num_points-2):
@@ -132,6 +138,11 @@ class Cmv:
             return False
 
     def lic2(self):
+        if (self.epsilon < 0 or self.epsilon > np.pi):
+            return False
+        if (self.num_points < 3):
+            return False
+
         for i in range(self.num_points-2):
             x_i = self.points[i][0]
             x_i_plus_one = self.points[i+1][0]
@@ -254,7 +265,7 @@ class Cmv:
         
         lic_status = False
 
-        if ((self.num_points >= 3) and (self.k_pts >= 1)):
+        if ((self.num_points >= 3) and (self.k_pts >= 1) and (self.k_pts <= self.num_points-2) and (self.length1>=0)):
             for i in range(self.num_points - (self.k_pts + 1)):
 
                 p1 = self.points[i]
@@ -331,7 +342,7 @@ class Cmv:
         """
         lic_passed = False
 
-        if (self.c_pts > 0 and self.d_pts > 0 and self.num_points >= 5):
+        if (self.c_pts >= 1 and self.d_pts >= 1 and self.num_points >= 5 and (self.c_pts+self.d_pts <= self.num_points -3) and self.epsilon >= 0 and self.epsilon < np.pi):
 
             for i in range (self.num_points - (self.c_pts + self.d_pts + 2)):
                 p1 = self.points[i]
@@ -386,7 +397,7 @@ class Cmv:
         lic_passed = False
         j = self.g_pts + 1
 
-        if(self.num_points >=3 ):
+        if(self.num_points >=3 and self.g_pts >= 1 and self.g_pts<= self.num_points-2):
             for i in range(self.num_points - j):
                 x_1 = self.points[i][0]
                 x_2 = self.points[i+j][0]
@@ -396,7 +407,32 @@ class Cmv:
         return lic_passed
 
     def lic12(self):
-        pass
+        """
+        There exists at least one set of two data points, separated by exactly K PTS consecutive 
+        intervening points, which are a distance greater than the length, LENGTH1, apart. 
+        In addition, there exists at least one set of two data points (which can be the same 
+        or different from the two data points just mentioned), separated by exactly K PTS 
+        consecutive intervening points, that are a distance less than the length, LENGTH2, apart. 
+        Both parts must be true for the LIC to be true. The condition is not met 
+        when NUMPOINTS < 3, 0 ≤ LENGTH2
+        """
+        
+        flag_1, flag_2= False, False
+        
+        if (self.num_points < 3) or self.length1<0 or self.length2 <0 or self.k_pts < 1 or self.k_pts > self.num_points - 2:
+            return False
+
+        for i in range(self.num_points - (self.k_pts + 1)):
+            p1 = self.points[i]
+            p2 = self.points[i + self.k_pts + 1]
+            distance = math.dist(p1,p2)
+            if (distance > self.length1):
+                flag_1=True
+            if (distance < self.length2):
+                flag_2=True
+
+        return flag_1 and flag_2
+        
 
     def lic13(self):
         """
@@ -462,4 +498,21 @@ class Cmv:
         return np.all(conditions)
 
     def lic14(self):
-        pass
+        """
+        explanation
+        """
+        flag_1, flag_2 = False, False
+        
+        if self.num_points < 5 or self.area1 < 0 or self.area2 < 0 or self.e_pts < 1 or self.f_pts < 1 or (self.e_pts + self.f_pts + 3) > self.num_points:
+            return False
+
+        for i in range (self.num_points - (self.e_pts + self.f_pts + 2)):
+            p1 = self.points[i + self.e_pts +1]-self.points[i]
+            p2 = self.points[i + self.e_pts + self.f_pts +2]-self.points[i]
+            area=abs(p1[0]*p2[1]-p1[1]*p2[0])/2
+            if area>self.area1:
+                flag_1=True
+            if area<self.area2:
+                flag_2=True
+        
+        return flag_1 and flag_2

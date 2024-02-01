@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DECIDE Program Input Form</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>DECIDE Program</h1>
+    <form action="/" method="post">
+        <div class="container">
+            <div class="panel">
+                <h2>Enter Parameters</h2>
+                {% for param in parameters.keys() %}
+                <div class="form-group">
+                    <label for="{{ param }}">{{ param }}</label>
+                    <input type="text" id="{{ param }}" name="{{ param }}">
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="panel">
+                <h2>Enter Points and File Paths</h2>
+                <div class="form-group">
+                    <label for="points">Enter Points (format: x1,y1; x2,y2; ...):</label>
+                    <input type="text" id="points" name="points">
+                </div>
+                <div class="form-group">
+                    <label for="lcm_path">Enter the path to LCM matrix file:</label>
+                    <input type="text" id="lcm_path" name="lcm_path">
+                </div>
+                <div class="form-group">
+                    <label for="puv_path">Enter the path to PUV matrix file:</label>
+                    <input type="text" id="puv_path" name="puv_path">
+                </div>
+            </div>
+        </div>
+        <div class="submit-button">
+            <input type="submit" value="Submit All Data">
+        </div>
+    </form>
+</body>
+</html>
