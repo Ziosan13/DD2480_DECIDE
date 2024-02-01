@@ -468,13 +468,13 @@ class Cmv:
         """
         flag_1, flag_2 = False, False
         
-        if self.num_points < 5:
+        if self.num_points < 5 or self.area1 < 0 or self.area2 < 0 or self.e_pts < 1 or self.f_pts < 1 or (self.e_pts + self.f_pts + 3) > self.num_points:
             return False
 
         for i in range (self.num_points - (self.e_pts + self.f_pts + 2)):
             p1 = self.points[i + self.e_pts +1]-self.points[i]
             p2 = self.points[i + self.e_pts + self.f_pts +2]-self.points[i]
-            area=math.fabs(p1[0]*p2[1]-p1[1]*p2[0])/2
+            area=abs(p1[0]*p2[1]-p1[1]*p2[0])/2
             if area>self.area1:
                 flag_1=True
             if area<self.area2:
