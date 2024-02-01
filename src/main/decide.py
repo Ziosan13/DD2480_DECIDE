@@ -109,6 +109,58 @@ class Decide:
         
         self.lcm = lcm
 
+    def calc_pum(self,lcm,cmv):
+        """
+        Calculates the PUM Matrix from a LCM matrix and CMV array 
+
+        Parameters
+        ----------
+        lcm: array
+            Logical Connector Matrix
+        cmv: array
+            Conditions Met Vector
+
+        Returns
+        -------
+        pum: array
+            Preliminary Unlocking Matrix 
+        """
+        pum = np.empty((15, 15), dtype=bool)
+
+        for i in range(len(lcm)):
+            for j in range(len(lcm)):
+                if(i == j):
+                    pum[i][j] = True
+                    continue
+                match lcm[i][j]:
+                    case 'NOTUSED':
+                        pum[i][j] = True
+                    case 'ANDD':
+                        pum[i][j] = cmv[i] and cmv[j]
+                    case 'ORR':
+                        pum[i][j] = cmv[i] or cmv[j]
+                    case _:
+                        raise ValueError("Wrong value in LCM.")
+                pum[j][i] = pum[i][j]
+        return pum
+
+    def compute_fuv(self):
+        for i in range(15):
+            if self.puv[i] == False: # If puv[i] is false, fuv[i] is always true
+                self.fuv[i] = True
+            
+            else:   # else we check if
+                falseFound = False
+
+                for j in range(15): 
+                    if i != j and self.pum[i][j] == False:
+                        falseFound = True
+
+                if not falseFound:
+                    self.fuv[i] = True
+        
+        return self.fuv
+
 
     def decide(self) -> None:
         """
@@ -129,6 +181,7 @@ class Decide:
         # compute PUM
 
         # compute FUV
+        self.compute_fuv()
 
         # compute LAUNCH
         self.launch = np.all(self.fuv)
