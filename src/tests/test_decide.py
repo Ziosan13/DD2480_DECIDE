@@ -281,7 +281,6 @@ class test_decide(unittest.TestCase):
         # - They must all be True 
         numpoints = 5
         points = np.array([[-1,-1], [1,1], [-1,1], [1,-1], [2,2]])
-        puv = np.array([False, False, False, False, True, False, False, True, False, False, True, False, False, True, False])
         parameters = {
             "LENGTH1": 0.5,
             "RADIUS1": 0.5,
@@ -303,8 +302,9 @@ class test_decide(unittest.TestCase):
             "RADIUS2": 10.0,
             "AREA2": 10.0
         }
-        decide_instance = Decide(numpoints, points, parameters, None, puv)
+        decide_instance = Decide(numpoints, points, parameters, None, None)
         decide_instance.load_lcm_from_file('../data/lcm_testcase_3.txt')
+        decide_instance.load_puv_from_file('../data/puv_testcase_3.txt')
 
         # Making sure relevant LICs i.e. 4, 7, 10, 13 are True
         self.assertTrue(decide_instance.cmv.cmv[4])
