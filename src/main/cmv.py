@@ -68,6 +68,8 @@ class Cmv:
         - 0 ≤ LENGTH1
         """
         
+        if (type(self.length1) is not float) and (type(self.length1) is not int):
+            return False
         if (self.length1 < 0 or self.num_points < 2):
             return False
 
@@ -170,6 +172,8 @@ class Cmv:
         - (0 <= EPSILON <= PI)
         """
         
+        if (type(self.epsilon) is not float) and (type(self.epsilon) is not int):
+            return False
         if (self.epsilon < 0 or self.epsilon > np.pi):
             return False
         if (self.num_points < 3):
@@ -232,6 +236,17 @@ class Cmv:
         - Q_PTS: [2, NUMPOINTS]
         """
         
+        if (type(self.quads) is not float) and (type(self.quads) is not int):
+            return False
+        if (self.quads < 1 or self.quads > 3):
+            return False
+        if (type(self.q_pts) is not float) and (type(self.q_pts) is not int):
+            return False
+        if (self.q_pts < 2 or self.q_pts > self.num_points):
+            return False
+        if (self.num_points < 1):
+            return False
+        
         for i in range(self.num_points):
             if i + self.q_pts > self.num_points:
                 break
@@ -261,6 +276,8 @@ class Cmv:
         two consecutive data points, (X[i], Y[i]) and (X[j], Y[j]),
         such that X[j] - X[i] < 0. 
         """
+        if self.num_points < 1:
+            return False
         
         for i in range(self.num_points - 1):
             if self.points[i+1][0] - self.points[i][0] < 0:
@@ -283,6 +300,11 @@ class Cmv:
         - DIST >= 0,
         """
         
+        if (type(self.dist) is not float) and (type(self.dist) is not int):
+            return False
+        if (type(self.n_pts) is not float) and (type(self.n_pts) is not int):
+            return False
+        
         if self.num_points < 3 or self.n_pts < 3 or self.n_pts > self.num_points or self.dist <= 0:
             return False
         for i in range(self.num_points - self.n_pts + 1):
@@ -304,8 +326,14 @@ class Cmv:
         
         Conditions on parameters:
         - NUMPOINTS >= 3
+        - LENGTH1 >= 0
         - 1 <= K_PTS <= NUMPOINTS - 2
         """
+        
+        if (type(self.k_pts) is not float) and (type(self.k_pts) is not int):
+            return False
+        if (type(self.length1) is not float) and (type(self.length1) is not int):
+            return False
         
         lic_status = False
 
@@ -388,6 +416,13 @@ class Cmv:
         - C_PTS + D_PTS <= NUMPOINTS - 3
         """
         
+        if (type(self.c_pts) is not float) and (type(self.c_pts) is not int):
+            return False
+        if (type(self.d_pts) is not float) and (type(self.d_pts) is not int):
+            return False
+        if (type(self.epsilon) is not float) and (type(self.epsilon) is not int):
+            return False
+        
         lic_passed = False
 
         if (self.c_pts >= 1 and self.d_pts >= 1 and self.num_points >= 5 and (self.c_pts+self.d_pts <= self.num_points -3) and self.epsilon >= 0 and self.epsilon < np.pi):
@@ -422,10 +457,18 @@ class Cmv:
         
         Conditions on parameters:
         - NUMPOINTS >= 5
+        - AREA1 >= 0
         - 1 <= E_PTS
         - 1 <= F_PTS
         - E_PTS + F_PTS <= NUMPOINTS - 3
         """
+        
+        if (type(self.area1) is not float) and (type(self.area1) is not int) or (self.area1 < 0):
+            return False
+        if (type(self.e_pts) is not float) and (type(self.e_pts) is not int):
+            return False
+        if (type(self.f_pts) is not float) and (type(self.f_pts) is not int):
+            return False
         
         if self.num_points < 5 or self.e_pts < 1 or self.f_pts < 1 or (self.e_pts + self.f_pts + 3) > self.num_points:
             return False
@@ -450,6 +493,9 @@ class Cmv:
         - NUMPOINTS >= 3
         - 1 ≤ G PTS ≤ NUMPOINTS−2
         """
+        
+        if (type(self.g_pts) is not float) and (type(self.g_pts) is not int):
+            return False
         
         lic_passed = False
         j = self.g_pts + 1
@@ -481,6 +527,13 @@ class Cmv:
         - 0 <= LENGTH1
         - 0 <= LENGTH2
         """
+        
+        if (type(self.length1) is not float) and (type(self.length1) is not int):
+            return False
+        if (type(self.length2) is not float) and (type(self.length2) is not int):
+            return False
+        if (type(self.k_pts) is not float) and (type(self.k_pts) is not int):
+            return False
         
         flag_1, flag_2= False, False
         
@@ -585,6 +638,16 @@ class Cmv:
         - 0 <= AREA1
         - 0 <= AREA2
         """
+        
+        if (type(self.area1) is not float) and (type(self.area1) is not int) or (self.area1 < 0):
+            return False
+        if (type(self.area2) is not float) and (type(self.area2) is not int) or (self.area2 < 0):
+            return False
+        if (type(self.e_pts) is not float) and (type(self.e_pts) is not int):
+            return False
+        if (type(self.f_pts) is not float) and (type(self.f_pts) is not int):
+            return False
+        
         flag_1, flag_2 = False, False
         
         if self.num_points < 5 or self.area1 < 0 or self.area2 < 0 or self.e_pts < 1 or self.f_pts < 1 or (self.e_pts + self.f_pts + 3) > self.num_points:
