@@ -641,7 +641,7 @@ class Cmv:
         
         if (type(self.area1) is not float) and (type(self.area1) is not int) or (self.area1 < 0):
             return False
-        if (type(self.area2) is not float) and (type(self.area2) is not int) or (self.area2 < 0):
+        if (type(self.area2) is not float) and (type(self.area2) is not int) or (self.area2 <= 0):
             return False
         if (type(self.e_pts) is not float) and (type(self.e_pts) is not int):
             return False
@@ -650,7 +650,7 @@ class Cmv:
         
         flag_1, flag_2 = False, False
         
-        if self.num_points < 5 or self.area1 < 0 or self.area2 < 0 or self.e_pts < 1 or self.f_pts < 1 or (self.e_pts + self.f_pts + 3) > self.num_points:
+        if self.num_points < 5 or self.area1 < 0 or self.area2 <= 0 or self.e_pts < 1 or self.f_pts < 1 or (self.e_pts + self.f_pts + 3) > self.num_points:
             return False
 
         for i in range (self.num_points - (self.e_pts + self.f_pts + 2)):

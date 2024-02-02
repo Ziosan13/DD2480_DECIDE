@@ -2388,6 +2388,11 @@ class test_cmv(unittest.TestCase):
         params['E_PTS'] = 3
         params['F_PTS'] = [1,1]
         self.assertFalse(Cmv(params, points, len(points)).lic14())
+
+        # Test Case 15: - False
+        # Condition not met when 0 less than or equal to AREA2
+        params['AREA2'] = 0
+        self.assertFalse(Cmv(params, points, len(points)).lic14())
     
 if __name__ == '__main__':
     unittest.main()
