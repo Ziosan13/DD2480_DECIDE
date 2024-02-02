@@ -58,6 +58,16 @@ class Cmv:
         return self.cmv
 
     def lic0(self):
+        """
+        This LIC is True if there exists at least one set of two 
+        consecutive data points that are a distance greater than 
+        the length, LENGTH1, apart.
+        
+        Condition on parameters
+        - NUMPOINTS ≥ 2
+        - 0 ≤ LENGTH1
+        """
+        
         if (self.length1 < 0 or self.num_points < 2):
             return False
 
@@ -75,7 +85,16 @@ class Cmv:
         return False
 
     def lic1(self):
-
+        """
+        This LIC is True if there exists at least one set of 
+        three consecutive data points that cannot all be contained 
+        within or on a circle of radius RADIUS1.
+        
+        Conditions on parameters:
+        - NUMPOINTS ≥ 3
+        - 0 ≤ RADIUS1
+        """
+        
         if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
             return False
         
@@ -138,6 +157,19 @@ class Cmv:
             return False
 
     def lic2(self):
+        """
+        This LIC is True if there exists at least one set of three consecutive data points 
+        which form an angle such that: 
+        angle < (PI − EPSILON) or angle > (PI + EPSILON)
+        The second of the three consecutive points is always the vertex of the angle. 
+        If either the first point or the last point (or both) coincides with the vertex, 
+        the angle is undefined and the LIC is not satisfied by those three points.
+        
+        Conditions on parameters:
+        - NUMPOINTS >= 3
+        - (0 <= EPSILON <= PI)
+        """
+        
         if (self.epsilon < 0 or self.epsilon > np.pi):
             return False
         if (self.num_points < 3):
@@ -164,9 +196,6 @@ class Cmv:
         
         return False
 
-            
- 
-
     def lic3(self):
         """
         This LIC is True if there exists at least one 
@@ -174,8 +203,10 @@ class Cmv:
         the vertices of a triangle with area greater than AREA1. 
 
         Conditions on parameters: 
+        - NUMPOINTS >= 3
         - (0 <= AREA1)
         """
+        
         if (type(self.area1) is not float) and (type(self.area1) is not int) or (self.area1 < 0):
             return False
         
@@ -194,8 +225,13 @@ class Cmv:
         """
         This LIC is True if there exists at least one set of
         Q_PTS consecutive data points that lie in more than
-        QUADS quadrants. QUADS: [1,3], Q_PTS: [2, NUMPOINTS]
+        QUADS quadrants. 
+        
+        Conditions on parameters:
+        - QUADS: [1,3]
+        - Q_PTS: [2, NUMPOINTS]
         """
+        
         for i in range(self.num_points):
             if i + self.q_pts > self.num_points:
                 break
@@ -225,6 +261,7 @@ class Cmv:
         two consecutive data points, (X[i], Y[i]) and (X[j], Y[j]),
         such that X[j] - X[i] < 0. 
         """
+        
         for i in range(self.num_points - 1):
             if self.points[i+1][0] - self.points[i][0] < 0:
                 return True
@@ -240,9 +277,12 @@ class Cmv:
         is calculated as the distance between this point
         and the other points respectively.
         
-        If NUMPOINTS < 3 or 3 <= N_PTS <= NUMPOINTS or DIST <= 0,
-        the LIC is false.
+        Conditions on parameters:
+        - NUMPOINTS >= 3
+        - 3 <= N_PTS <= NUMPOINTS 
+        - DIST >= 0,
         """
+        
         if self.num_points < 3 or self.n_pts < 3 or self.n_pts > self.num_points or self.dist <= 0:
             return False
         for i in range(self.num_points - self.n_pts + 1):
@@ -261,6 +301,10 @@ class Cmv:
         Calculates the distance of two data points separated by exactly 
         K PTS consecutive intervening points. If the distance is greater
         than length1 the lic is set to True.
+        
+        Conditions on parameters:
+        - NUMPOINTS >= 3
+        - 1 <= K_PTS <= NUMPOINTS - 2
         """
         
         lic_status = False
@@ -282,14 +326,15 @@ class Cmv:
         set of three data points separated by exactly A PTS and B PTS 
         consecutive intervening points, respectively, 
         that cannot be contained within or on a circle of radius RADIUS1. 
-        The condition is not met when NUMPOINTS < 5.
 
         Conditions on parameters: 
+        - NUMPOINTS >= 5
         - (0 <= RADIUS1)
         - (1 <= A_PTS)
         - (1 <= B_PTS)
         - (A_PTS + B_PTS <= (NUMPOINTS - 3))
         """
+        
         if ((type(self.radius1) is not float) and (type(self.radius1) is not int)) or (self.radius1 < 0):
             return False
         if (type(self.a_pts) is not int) or (type(self.b_pts) is not int) or (self.a_pts < 1) or (self.b_pts < 1):
@@ -327,7 +372,7 @@ class Cmv:
 
     def lic9(self):
         """
-        There exists at least one set of three data points separated 
+        This LIC is True if there exists at least one set of three data points separated 
         by exactly C_PTS and D_PTS consecutive intervening points, 
         respectively, that form an angle such that:
 
@@ -337,9 +382,12 @@ class Cmv:
         If either of the other points coincide with the vertex, the angle is disregarded.
 
         Conditions on parameters: 
-        1 <= C_PTS, 1 <= D_PTS
-        C_PTS + D_PTS <= NUMPOINTS - 3
+        - NUMPOINTS >= 5
+        - 1 <= C_PTS
+        - 1 <= D_PTS
+        - C_PTS + D_PTS <= NUMPOINTS - 3
         """
+        
         lic_passed = False
 
         if (self.c_pts >= 1 and self.d_pts >= 1 and self.num_points >= 5 and (self.c_pts+self.d_pts <= self.num_points -3) and self.epsilon >= 0 and self.epsilon < np.pi):
@@ -367,11 +415,18 @@ class Cmv:
                     
     def lic10(self):
         """
-        This LIC is True if exists at least one set of 
+        This LIC is True if there exists at least one set of 
         three data points separated by exactly E PTS and 
         F PTS consecutive intervening points, respectively, 
         that are the vertices of a triangle with area greater than AREA1. 
+        
+        Conditions on parameters:
+        - NUMPOINTS >= 5
+        - 1 <= E_PTS
+        - 1 <= F_PTS
+        - E_PTS + F_PTS <= NUMPOINTS - 3
         """
+        
         if self.num_points < 5 or self.e_pts < 1 or self.f_pts < 1 or (self.e_pts + self.f_pts + 3) > self.num_points:
             return False
         
@@ -386,14 +441,16 @@ class Cmv:
     
     def lic11(self):
         """
-        There exists at least one set of two data points, 
+        This LIC is True if there exists at least one set of two data points, 
         (X[i],Y[i])and (X[j],Y[j]), 
         separated by exactly G PTS consecutive intervening points,
         such that X[j] - X[i] < 0. (where i < j )
 
         Conditions on parameters: 
-        1 ≤ G PTS ≤ NUMPOINTS−2
+        - NUMPOINTS >= 3
+        - 1 ≤ G PTS ≤ NUMPOINTS−2
         """
+        
         lic_passed = False
         j = self.g_pts + 1
 
@@ -408,13 +465,21 @@ class Cmv:
 
     def lic12(self):
         """
-        There exists at least one set of two data points, separated by exactly K PTS consecutive 
-        intervening points, which are a distance greater than the length, LENGTH1, apart. 
-        In addition, there exists at least one set of two data points (which can be the same 
+        This LIC is true if both conditions below are true.
+        
+        1. There exists at least one set of two data points, 
+        separated by exactly K PTS consecutive intervening points, 
+        which are a distance greater than the length, LENGTH1, apart. 
+        
+        2. There exists at least one set of two data points (which can be the same 
         or different from the two data points just mentioned), separated by exactly K PTS 
         consecutive intervening points, that are a distance less than the length, LENGTH2, apart. 
-        Both parts must be true for the LIC to be true. The condition is not met 
-        when NUMPOINTS < 3, 0 ≤ LENGTH2
+        
+        Conditions on parameters:
+        - NUMPOINTS >= 3
+        - 1 <= K_PTS <= NUMPOINTS - 2
+        - 0 <= LENGTH1
+        - 0 <= LENGTH2
         """
         
         flag_1, flag_2= False, False
@@ -436,18 +501,20 @@ class Cmv:
 
     def lic13(self):
         """
-        This LIC is True if there exists at least one
+        This LIC is true if both conditions below are true.
+        
+        1. there exists at least one
         set of three data points, separated by exactly A PTS and B PTS
         consecutive intervening points, respectively,
         that cannot be contained within or on a circle of radius RADIUS1. 
-        In addition, there exists at least one set of three data points 
+        
+        2. There exists at least one set of three data points 
         (which can be the same or different from the three data points just mentioned)
         separated by exactly A PTS and B PTS consecutive intervening points, 
         respectively, that can be contained in or on a circle of radius RADIUS2. 
-        Both parts must be true for the LIC to be true. 
-        The condition is not met when NUMPOINTS < 5.
 
         Conditions on parameters: 
+        - NUMPOINTS >= 5
         - (0 <= RADIUS1)
         - (0 <= RADIUS2)
         - (1 <= A_PTS)
@@ -499,7 +566,24 @@ class Cmv:
 
     def lic14(self):
         """
-        explanation
+        This LIC is true if both conditions below are true.
+        
+        1. There exists at least one set of three data points, 
+        separated by exactly E PTS and F PTS consecutive intervening points, 
+        respectively, that are the vertices of a triangle with area greater than AREA1. 
+        
+        2. There exist three data points (which can be the same or different 
+        from the three data points just mentioned) separated by exactly E PTS and F PTS 
+        consecutive intervening points, respectively, that are the vertices of a triangle 
+        with area less than AREA2. 
+        
+        Conditions on parameters:
+        - NUMPOINTS >= 5
+        - 1 <= E_PTS
+        - 1 <= F_PTS
+        - E_PTS + F_PTS <= NUMPOINTS - 3
+        - 0 <= AREA1
+        - 0 <= AREA2
         """
         flag_1, flag_2 = False, False
         
